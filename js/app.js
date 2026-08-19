@@ -1886,7 +1886,9 @@ window.addEventListener('DOMContentLoaded', async () => {
       button.disabled = false;
       button.textContent = 'Entrar';
 
-      await startRealSession();
+      console.log('ANTES DO START REAL');
+await startRealSession();
+console.log('DEPOIS DO START REAL');
 
     } catch (err) {
       console.error('ERRO INESPERADO NO LOGIN:', err);
