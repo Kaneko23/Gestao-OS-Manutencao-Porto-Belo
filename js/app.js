@@ -10,7 +10,7 @@ let sb = realSb;
 let demoMode = false;
 
 const DEMO_KEY = 'manutencao_escolar_demo_v1';
-
+const { error } = await realSb.auth.signInWithPassword({email,password});
 function demoSeed() {
   return {
     escolas: [
@@ -1849,10 +1849,11 @@ window.addEventListener('DOMContentLoaded', async () => {
 
     const { error } = await realSb.auth.signInWithPassword({email,password});
     if (error) {
-      loginError('E-mail ou senha inválidos.');
-      button.disabled=false; button.textContent='Entrar';
-      return;
-    }
+  loginError('E-mail ou senha inválidos.');
+  button.disabled=false;
+  button.textContent='Entrar';
+  return;
+}
     button.disabled=false; button.textContent='Entrar';
     await startRealSession();
   });

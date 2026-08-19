@@ -1,7 +1,3 @@
--- =================================================================
--- Índices de performance — rode isto UMA VEZ no Supabase SQL Editor
--- Não apaga nem altera dados, só acelera as consultas por chave estrangeira
--- =================================================================
 
 CREATE INDEX IF NOT EXISTS idx_ordens_servico_escola_id ON ordens_servico(escola_id);
 CREATE INDEX IF NOT EXISTS idx_ordens_servico_status     ON ordens_servico(status);
@@ -18,6 +14,5 @@ CREATE INDEX IF NOT EXISTS idx_itens_compra_data_retirada  ON itens_compra(data_
 
 CREATE INDEX IF NOT EXISTS idx_notas_compra_data_compra ON notas_compra(data_compra);
 
--- Bônus: acelera a busca do Google Apps Script por nome de escola
--- (usada em toda submissão de formulário, em buscarOuCriarEscola)
+
 CREATE INDEX IF NOT EXISTS idx_escolas_nome ON escolas(nome);
