@@ -1,2 +1,2 @@
 const SUPABASE_URL = 'https://hanhihcwfhehudqvqxkz.supabase.co';
-const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImhhbmhpaGN3ZmhlaHVkcXZxeGt6Iiwicm9sZSI6IkFub24iLCJpYXQiOjE3ODY5Njc2NjgsImV4cCI6MjEwMjU0MzY2OH0.tqebOniqg2_NgrJizXmqAifpoKver9oOY0UMwnucykM';
+const SUPABASE_ANON_KEY = 'sb_publishable_blxz2GPVjHDmkYgey9Z8bw_iuEXAhtO';
