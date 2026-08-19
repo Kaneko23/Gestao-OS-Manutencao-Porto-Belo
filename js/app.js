@@ -127,6 +127,7 @@ function hideLogin() {
   document.getElementById('auth-screen').hidden = true;
   document.querySelector('#sidebar').style.display = '';
   document.querySelector('#main-wrapper').style.display = '';
+  
 }
 function loginError(message) {
   const el = document.getElementById('login-error');
@@ -136,7 +137,11 @@ async function startRealSession() {
   demoMode = false; sb = realSb; hideLogin();
   document.body.classList.remove('demo-mode');
   try { await loadGlobal(); } catch (e) { console.error(e); toast('Erro de conexão com o banco de dados.', 'error'); }
-  router();
+  console.log('ANTES DO ROUTER');
+
+router();
+
+console.log('DEPOIS DO ROUTER');
 }
 async function startDemoSession() {
   demoMode = true; sb = makeDemoClient();
@@ -1889,6 +1894,10 @@ window.addEventListener('DOMContentLoaded', async () => {
       console.log('ANTES DO START REAL');
 
       await startRealSession();
+      console.log('DEPOIS DO START REAL');
+console.log('AUTH SCREEN HIDDEN:', document.getElementById('auth-screen')?.hidden);
+console.log('SIDEBAR:', document.querySelector('#sidebar')?.style.display);
+console.log('MAIN:', document.querySelector('#main-wrapper')?.style.display);
 
       console.log('DEPOIS DO START REAL');
 
