@@ -54,6 +54,16 @@ function formatarMateriaisTexto(itens) {
   return itens.map(i => `${Number(i.quantidade).toLocaleString('pt-BR')}x ${i.descricao}`).join(', ');
 }
 
+// Escapa texto para uso seguro dentro de atributos HTML (evita que aspas ou
+// tags dentro de nomes/descrições "quebrem" a tag e vazem como texto na tela)
+function escAttr(s) {
+  return String(s ?? '')
+    .replace(/&/g, '&amp;')
+    .replace(/"/g, '&quot;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;');
+}
+
 // ─── Toast ────────────────────────────────────────────
 function toast(msg, type = 'success') {
   const icons = {
@@ -364,9 +374,10 @@ async function renderOsList() {
         <tbody>
           ${lista.map(os => {
             const matTexto = formatarMateriaisTexto(os.os_materiais);
+            const matTextoPlano = (os.os_materiais || []).map(i => i.descricao).join(' '); // sem HTML, só para busca
+            const desc = escAttr((os.descricao_problema + ' ' + os.solicitante + ' ' + os.numero + ' ' + matTextoPlano).toLowerCase());
             return `
-            <tr data-escola-id="${os.escola_id || ''}" data-escola-nome="${(os.escola?.nome || '').toLowerCase()}" data-desc="${(os.descricao_problema + ' ' + os.solicitante + ' ' + os.numero + ' ' + matTexto).toLowerCase()}" data-status="${os.status}" data-origem="${os.origem || 'Manual'}" data-data="${os.data_abertura}">
-              <td><strong class="text-blue">#${os.numero}</strong></td>
+            <tr data-escola-id="${os.escola_id || ''}" data-escola-nome="${escAttr((os.escola?.nome || '').toLowerCase())}" data-desc="${desc}" data-status="${escAttr(os.status)}" data-origem="${escAttr(os.origem || 'Manual')}" data-data="${os.data_abertura}">              <td><strong class="text-blue">#${os.numero}</strong></td>
               <td>${os.origem === 'Formulario' ? '<span class="badge badge-ativa">Formulário</span>' : '<span class="badge badge-aberta">Manual</span>'}</td>
               <td>${fmt.date(os.data_abertura)}</td>
               <td><strong>${os.escola?.nome || '<span class="text-muted">—</span>'}</strong></td>
@@ -830,7 +841,7 @@ async function renderComprasList() {
             const escolaIds = (nc.itens_compra || []).map(i => i.escola_id).filter(Boolean).join(',');
             const totalQtd = (nc.itens_compra || []).reduce((s, i) => s + Number(i.quantidade || 0), 0);
             return `
-            <tr data-forn="${(nc.fornecedor || '').toLowerCase()}" data-resp="${(nc.responsavel_compra + ' ' + nc.responsavel_autorizacao + ' ' + nc.numero).toLowerCase()}" data-escolas-id="${escolaIds}" data-status="${nc.status}" data-data="${nc.data_compra}">
+            <tr data-forn="${escAttr((nc.fornecedor || '').toLowerCase())}" data-resp="${escAttr((nc.responsavel_compra + ' ' + nc.responsavel_autorizacao + ' ' + nc.numero).toLowerCase())}" data-escolas-id="${escolaIds}" data-status="${escAttr(nc.status)}" data-data="${nc.data_compra}">
               <td><strong class="text-blue">Nota #${nc.numero}</strong></td>
               <td>${fmt.date(nc.data_compra)}</td>
               <td><strong>${nc.fornecedor}</strong></td>
@@ -1192,7 +1203,7 @@ async function renderMateriais() {
         <thead><tr><th>Nome do Material</th><th>Unidade</th><th></th></tr></thead>
         <tbody>
           ${(lista || []).map(m => `
-            <tr data-nome="${m.nome.toLowerCase()}">
+            <tr data-nome="${escAttr(m.nome.toLowerCase())}">
               <td><strong>${m.nome}</strong></td>
               <td><span class="badge badge-ativa">${m.unidade}</span></td>
               <td><div class="td-actions">
