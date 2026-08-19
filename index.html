@@ -6,10 +6,56 @@
   <title>Manutenção Escolar — Prefeitura de Portobelo</title>
   <meta name="description" content="Sistema de gestão de manutenção escolar e controle de compras para a Prefeitura de Portobelo">
   <link rel="stylesheet" href="css/main.css">
+  <link rel="stylesheet" href="css/auth.css">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 </head>
 <body>
+
+  <!-- ===== LOGIN ===== -->
+  <section id="auth-screen" class="auth-screen" aria-label="Login">
+    <div class="auth-card">
+      <div class="auth-brand">
+        <div class="auth-brand-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+            <path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a6 6 0 0 1 7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/>
+          </svg>
+        </div>
+        <div>
+          <h1>Manutenção Escolar</h1>
+          <p>Portobelo - SC</p>
+        </div>
+      </div>
+
+      <div class="auth-heading">
+        <h2>Acesso ao sistema</h2>
+        <p>Entre com sua conta autorizada para continuar.</p>
+      </div>
+
+      <form id="login-form" autocomplete="on">
+        <label class="auth-label" for="login-email">E-mail</label>
+        <input class="auth-input" id="login-email" type="email" autocomplete="username" required placeholder="seu@email.com">
+
+        <label class="auth-label" for="login-password">Senha</label>
+        <input class="auth-input" id="login-password" type="password" autocomplete="current-password" required placeholder="••••••••">
+
+        <div id="login-error" class="auth-error" role="alert" hidden></div>
+        <button class="auth-button" id="login-button" type="submit">Entrar</button>
+      </form>
+
+      <div class="auth-divider"><span>ou</span></div>
+
+      <button class="auth-demo-button" id="demo-button" type="button">
+        Acessar demonstração do portfólio
+      </button>
+
+      <p class="auth-demo-note">
+        A demonstração usa somente dados fictícios armazenados no navegador.
+        Nenhum dado do banco real é carregado.
+      </p>
+    </div>
+  </section>
+
 
   <!-- ===== SIDEBAR ===== -->
   <nav id="sidebar">
@@ -98,7 +144,7 @@
         </button>
         <div id="page-title">Dashboard</div>
       </div>
-      <div id="header-actions"></div>
+      <div id="header-actions"><button id="logout-btn" class="logout-btn" type="button" onclick="logout()">Sair</button></div>
     </header>
 
     <!-- Content Area -->

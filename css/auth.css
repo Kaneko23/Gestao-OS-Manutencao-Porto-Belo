@@ -1,0 +1,38 @@
+
+/* ===== AUTHENTICATION ===== */
+.auth-screen{
+  position:fixed;inset:0;z-index:9999;display:flex;align-items:center;justify-content:center;
+  padding:24px;background:linear-gradient(135deg,#f8fafc 0%,#eef2f7 100%);
+}
+.auth-card{
+  width:min(100%,430px);background:#fff;border:1px solid var(--slate-200,#e2e8f0);
+  border-radius:18px;padding:34px;box-shadow:0 20px 60px rgba(15,23,42,.12);
+}
+.auth-brand{display:flex;align-items:center;gap:13px;margin-bottom:28px}
+.auth-brand-icon{width:48px;height:48px;border-radius:12px;display:grid;place-items:center;
+  background:var(--primary,#2563eb);color:#fff}
+.auth-brand-icon svg{width:25px;height:25px}
+.auth-brand h1{font-size:18px;margin:0;color:#0f172a}
+.auth-brand p{font-size:12px;margin:3px 0 0;color:#64748b}
+.auth-heading h2{font-size:24px;margin:0 0 7px;color:#0f172a}
+.auth-heading p{font-size:13px;color:#64748b;margin:0 0 24px;line-height:1.5}
+.auth-label{display:block;font-size:13px;font-weight:600;color:#334155;margin:14px 0 7px}
+.auth-input{width:100%;box-sizing:border-box;border:1px solid #cbd5e1;border-radius:9px;padding:12px 13px;
+  font:inherit;color:#0f172a;background:#fff;outline:none;transition:.15s}
+.auth-input:focus{border-color:#2563eb;box-shadow:0 0 0 3px rgba(37,99,235,.12)}
+.auth-button,.auth-demo-button{width:100%;border-radius:9px;padding:12px 14px;font:inherit;font-weight:700;cursor:pointer}
+.auth-button{margin-top:20px;border:0;background:#2563eb;color:#fff}
+.auth-button:disabled{opacity:.65;cursor:wait}
+.auth-divider{display:flex;align-items:center;gap:10px;margin:22px 0;color:#94a3b8;font-size:12px}
+.auth-divider:before,.auth-divider:after{content:"";height:1px;background:#e2e8f0;flex:1}
+.auth-demo-button{border:1px solid #cbd5e1;background:#fff;color:#334155}
+.auth-demo-button:hover{background:#f8fafc}
+.auth-demo-note{font-size:11px;line-height:1.5;color:#94a3b8;text-align:center;margin:12px 0 0}
+.auth-error{margin-top:13px;padding:10px 12px;border-radius:8px;background:#fef2f2;color:#b91c1c;font-size:12px}
+.logout-btn{border:1px solid #cbd5e1;background:#fff;color:#334155;border-radius:8px;padding:7px 12px;font-weight:600;cursor:pointer}
+.logout-btn:hover{background:#f8fafc}
+.demo-badge{display:inline-flex;align-items:center;gap:6px;padding:5px 9px;border-radius:999px;
+  background:#eff6ff;color:#1d4ed8;font-size:11px;font-weight:700;margin-right:8px}
+@media(max-width:600px){.auth-card{padding:26px 22px}.auth-screen{padding:14px}}
+
+body:not(.app-ready) #sidebar,body:not(.app-ready) #main-wrapper{display:none}

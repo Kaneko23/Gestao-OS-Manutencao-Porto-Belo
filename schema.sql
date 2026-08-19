@@ -96,13 +96,70 @@ CREATE INDEX idx_itens_compra_data_retirada  ON itens_compra(data_retirada);
 CREATE INDEX idx_notas_compra_data_compra    ON notas_compra(data_compra);
 CREATE INDEX idx_escolas_nome                ON escolas(nome);
 
--- 3. Desabilitar RLS (acesso interno livre)
-ALTER TABLE escolas DISABLE ROW LEVEL SECURITY;
-ALTER TABLE materiais DISABLE ROW LEVEL SECURITY;
-ALTER TABLE ordens_servico DISABLE ROW LEVEL SECURITY;
-ALTER TABLE os_materiais DISABLE ROW LEVEL SECURITY;
-ALTER TABLE notas_compra DISABLE ROW LEVEL SECURITY;
-ALTER TABLE itens_compra DISABLE ROW LEVEL SECURITY;
+-- 3. Segurança: RLS obrigatório.
+-- A ANON KEY do frontend é pública por design; ela NÃO concede acesso por si só.
+-- Somente usuários autenticados pelo Supabase Auth podem ler ou alterar os dados.
+ALTER TABLE escolas ENABLE ROW LEVEL SECURITY;
+ALTER TABLE materiais ENABLE ROW LEVEL SECURITY;
+ALTER TABLE ordens_servico ENABLE ROW LEVEL SECURITY;
+ALTER TABLE os_materiais ENABLE ROW LEVEL SECURITY;
+ALTER TABLE notas_compra ENABLE ROW LEVEL SECURITY;
+ALTER TABLE itens_compra ENABLE ROW LEVEL SECURITY;
+
+DROP POLICY IF EXISTS "authenticated_select_escolas" ON escolas;
+DROP POLICY IF EXISTS "authenticated_insert_escolas" ON escolas;
+DROP POLICY IF EXISTS "authenticated_update_escolas" ON escolas;
+DROP POLICY IF EXISTS "authenticated_delete_escolas" ON escolas;
+DROP POLICY IF EXISTS "authenticated_select_materiais" ON materiais;
+DROP POLICY IF EXISTS "authenticated_insert_materiais" ON materiais;
+DROP POLICY IF EXISTS "authenticated_update_materiais" ON materiais;
+DROP POLICY IF EXISTS "authenticated_delete_materiais" ON materiais;
+DROP POLICY IF EXISTS "authenticated_select_ordens_servico" ON ordens_servico;
+DROP POLICY IF EXISTS "authenticated_insert_ordens_servico" ON ordens_servico;
+DROP POLICY IF EXISTS "authenticated_update_ordens_servico" ON ordens_servico;
+DROP POLICY IF EXISTS "authenticated_delete_ordens_servico" ON ordens_servico;
+DROP POLICY IF EXISTS "authenticated_select_os_materiais" ON os_materiais;
+DROP POLICY IF EXISTS "authenticated_insert_os_materiais" ON os_materiais;
+DROP POLICY IF EXISTS "authenticated_update_os_materiais" ON os_materiais;
+DROP POLICY IF EXISTS "authenticated_delete_os_materiais" ON os_materiais;
+DROP POLICY IF EXISTS "authenticated_select_notas_compra" ON notas_compra;
+DROP POLICY IF EXISTS "authenticated_insert_notas_compra" ON notas_compra;
+DROP POLICY IF EXISTS "authenticated_update_notas_compra" ON notas_compra;
+DROP POLICY IF EXISTS "authenticated_delete_notas_compra" ON notas_compra;
+DROP POLICY IF EXISTS "authenticated_select_itens_compra" ON itens_compra;
+DROP POLICY IF EXISTS "authenticated_insert_itens_compra" ON itens_compra;
+DROP POLICY IF EXISTS "authenticated_update_itens_compra" ON itens_compra;
+DROP POLICY IF EXISTS "authenticated_delete_itens_compra" ON itens_compra;
+
+CREATE POLICY "authenticated_select_escolas" ON escolas FOR SELECT TO authenticated USING (true);
+CREATE POLICY "authenticated_insert_escolas" ON escolas FOR INSERT TO authenticated WITH CHECK (true);
+CREATE POLICY "authenticated_update_escolas" ON escolas FOR UPDATE TO authenticated USING (true) WITH CHECK (true);
+CREATE POLICY "authenticated_delete_escolas" ON escolas FOR DELETE TO authenticated USING (true);
+
+CREATE POLICY "authenticated_select_materiais" ON materiais FOR SELECT TO authenticated USING (true);
+CREATE POLICY "authenticated_insert_materiais" ON materiais FOR INSERT TO authenticated WITH CHECK (true);
+CREATE POLICY "authenticated_update_materiais" ON materiais FOR UPDATE TO authenticated USING (true) WITH CHECK (true);
+CREATE POLICY "authenticated_delete_materiais" ON materiais FOR DELETE TO authenticated USING (true);
+
+CREATE POLICY "authenticated_select_ordens_servico" ON ordens_servico FOR SELECT TO authenticated USING (true);
+CREATE POLICY "authenticated_insert_ordens_servico" ON ordens_servico FOR INSERT TO authenticated WITH CHECK (true);
+CREATE POLICY "authenticated_update_ordens_servico" ON ordens_servico FOR UPDATE TO authenticated USING (true) WITH CHECK (true);
+CREATE POLICY "authenticated_delete_ordens_servico" ON ordens_servico FOR DELETE TO authenticated USING (true);
+
+CREATE POLICY "authenticated_select_os_materiais" ON os_materiais FOR SELECT TO authenticated USING (true);
+CREATE POLICY "authenticated_insert_os_materiais" ON os_materiais FOR INSERT TO authenticated WITH CHECK (true);
+CREATE POLICY "authenticated_update_os_materiais" ON os_materiais FOR UPDATE TO authenticated USING (true) WITH CHECK (true);
+CREATE POLICY "authenticated_delete_os_materiais" ON os_materiais FOR DELETE TO authenticated USING (true);
+
+CREATE POLICY "authenticated_select_notas_compra" ON notas_compra FOR SELECT TO authenticated USING (true);
+CREATE POLICY "authenticated_insert_notas_compra" ON notas_compra FOR INSERT TO authenticated WITH CHECK (true);
+CREATE POLICY "authenticated_update_notas_compra" ON notas_compra FOR UPDATE TO authenticated USING (true) WITH CHECK (true);
+CREATE POLICY "authenticated_delete_notas_compra" ON notas_compra FOR DELETE TO authenticated USING (true);
+
+CREATE POLICY "authenticated_select_itens_compra" ON itens_compra FOR SELECT TO authenticated USING (true);
+CREATE POLICY "authenticated_insert_itens_compra" ON itens_compra FOR INSERT TO authenticated WITH CHECK (true);
+CREATE POLICY "authenticated_update_itens_compra" ON itens_compra FOR UPDATE TO authenticated USING (true) WITH CHECK (true);
+CREATE POLICY "authenticated_delete_itens_compra" ON itens_compra FOR DELETE TO authenticated USING (true);
 
 -- 4. Inserir escolas iniciais
 INSERT INTO escolas (nome, email) VALUES

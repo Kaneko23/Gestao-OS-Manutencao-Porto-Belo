@@ -5,7 +5,159 @@
 
 // ─── Supabase Client ─────────────────────────────────
 const { createClient } = supabase;
-const sb = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+const realSb = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+let sb = realSb;
+let demoMode = false;
+
+const DEMO_KEY = 'manutencao_escolar_demo_v1';
+
+function demoSeed() {
+  return {
+    escolas: [
+      {id:'d-escola-1',nome:'Escola Modelo Jardim',email:'demo@exemplo.local',created_at:'2026-08-01T10:00:00Z'},
+      {id:'d-escola-2',nome:'Centro Educacional Aurora',email:'demo@exemplo.local',created_at:'2026-08-02T10:00:00Z'},
+      {id:'d-escola-3',nome:'EM Prof. João Silva',email:'demo@exemplo.local',created_at:'2026-08-03T10:00:00Z'}
+    ],
+    materiais: [
+      {id:'d-mat-1',nome:'Lâmpada LED 12W',unidade:'un',custo_ref:18,created_at:'2026-08-01T10:00:00Z'},
+      {id:'d-mat-2',nome:'Torneira de pia',unidade:'un',custo_ref:45,created_at:'2026-08-01T10:00:00Z'},
+      {id:'d-mat-3',nome:'Cano PVC 50mm',unidade:'m',custo_ref:8,created_at:'2026-08-01T10:00:00Z'}
+    ],
+    ordens_servico: [
+      {id:'d-os-1',numero:1001,escola_id:'d-escola-1',solicitante:'Ana Souza',descricao_problema:'Lâmpadas queimadas no corredor.',descricao_servico:'Substituição das lâmpadas.',tecnico:'Equipe de manutenção',status:'Aberta',origem:'Manual',data_abertura:'2026-08-12',data_conclusao:null,created_at:'2026-08-12T09:00:00Z'},
+      {id:'d-os-2',numero:1002,escola_id:'d-escola-2',solicitante:'Carlos Lima',descricao_problema:'Vazamento na pia.',descricao_servico:'Troca do sifão e vedação.',tecnico:'Equipe de manutenção',status:'Em Andamento',origem:'Formulario',data_abertura:'2026-08-10',data_conclusao:null,created_at:'2026-08-10T09:00:00Z'},
+      {id:'d-os-3',numero:1003,escola_id:'d-escola-3',solicitante:'Marina Alves',descricao_problema:'Torneira com defeito.',descricao_servico:'Torneira substituída.',tecnico:'Equipe de manutenção',status:'Concluída',origem:'Manual',data_abertura:'2026-08-05',data_conclusao:'2026-08-06',created_at:'2026-08-05T09:00:00Z'}
+    ],
+    os_materiais: [
+      {id:'d-oi-1',os_id:'d-os-3',material_id:'d-mat-2',descricao:'Torneira de pia',quantidade:1,custo_unitario:45,created_at:'2026-08-06T09:00:00Z'}
+    ],
+    notas_compra: [
+      {id:'d-nota-1',numero:501,data_compra:'2026-08-08',fornecedor:'Fornecedor Demonstrativo',responsavel_compra:'Usuário Demo',responsavel_autorizacao:'Gestão Demo',valor_total:126,status:'Autorizada',observacoes:'Registro fictício para apresentação.',created_at:'2026-08-08T09:00:00Z'}
+    ],
+    itens_compra: [
+      {id:'d-item-1',nota_compra_id:'d-nota-1',material_id:'d-mat-1',descricao:'Lâmpada LED 12W',quantidade:3,custo_unitario:18,data_retirada:'2026-08-09',escola_id:'d-escola-1',os_id:'d-os-1',created_at:'2026-08-09T09:00:00Z'},
+      {id:'d-item-2',nota_compra_id:'d-nota-1',material_id:'d-mat-2',descricao:'Torneira de pia',quantidade:1,custo_unitario:45,data_retirada:'2026-08-09',escola_id:'d-escola-2',os_id:'d-os-2',created_at:'2026-08-09T09:00:00Z'},
+      {id:'d-item-3',nota_compra_id:'d-nota-1',material_id:'d-mat-3',descricao:'Cano PVC 50mm',quantidade:3,custo_unitario:8,data_retirada:'2026-08-09',escola_id:'d-escola-2',os_id:'d-os-2',created_at:'2026-08-09T09:00:00Z'}
+    ]
+  };
+}
+
+function getDemoDB() {
+  try {
+    const raw = localStorage.getItem(DEMO_KEY);
+    if (raw) return JSON.parse(raw);
+  } catch(e) {}
+  const db = demoSeed();
+  localStorage.setItem(DEMO_KEY, JSON.stringify(db));
+  return db;
+}
+function saveDemoDB(db) { localStorage.setItem(DEMO_KEY, JSON.stringify(db)); }
+
+function makeDemoClient() {
+  const db = getDemoDB();
+  const api = {
+    from(table) {
+      const state = { table, action:'select', columns:'*', filters:[], orderBy:null, single:false, payload:null };
+      const builder = {
+        select(columns='*') { state.columns=columns; return builder; },
+        order(column, opts={}) { state.orderBy={column, ascending: opts.ascending !== false}; return builder; },
+        eq(column,value) { state.filters.push([column,value]); return builder; },
+        single() { state.single=true; return builder; },
+        insert(payload) { state.action='insert'; state.payload=payload; return builder; },
+        update(payload) { state.action='update'; state.payload=payload; return builder; },
+        delete() { state.action='delete'; return builder; },
+        then(resolve,reject) {
+          try { resolve(executeDemoQuery(state)); } catch(e) { if(reject) reject(e); else throw e; }
+        }
+      };
+      return builder;
+    }
+  };
+
+  function clone(v) { return JSON.parse(JSON.stringify(v)); }
+  function match(row, filters) { return filters.every(([k,v]) => String(row[k]) === String(v)); }
+
+  function enrich(row, columns) {
+    const out=clone(row);
+    if (columns && columns.includes('escola:escola_id(nome)')) {
+      const e=db.escolas.find(x=>x.id===row.escola_id);
+      out.escola=e ? {nome:e.nome} : null;
+    }
+    return out;
+  }
+
+  function executeDemoQuery(s) {
+    let rows=db[s.table] || [];
+    if (s.action==='select') {
+      let data=rows.filter(r=>match(r,s.filters)).map(r=>enrich(r,s.columns));
+      if (s.orderBy) {
+        const {column,ascending}=s.orderBy;
+        data.sort((a,b)=>String(a[column]??'').localeCompare(String(b[column]??''),undefined,{numeric:true})*(ascending?1:-1));
+      }
+      if (s.single) return {data:data[0]||null,error:data[0]?null:{message:'Registro não encontrado'}};
+      return {data,error:null};
+    }
+    if (s.action==='insert') {
+      const payloads=Array.isArray(s.payload)?s.payload:[s.payload];
+      const inserted=payloads.map((p,i)=>{
+        const row={...p,id:p.id||('d-'+s.table+'-'+Date.now()+'-'+i),created_at:p.created_at||new Date().toISOString()};
+        if (s.table==='ordens_servico') row.numero=p.numero||Math.max(0,...rows.map(x=>Number(x.numero)||0))+1;
+        if (s.table==='notas_compra') row.numero=p.numero||Math.max(0,...rows.map(x=>Number(x.numero)||0))+1;
+        rows.push(row); return clone(row);
+      });
+      saveDemoDB(db);
+      const data=inserted.map(r=>enrich(r,s.columns));
+      if (s.single) return {data:data[0],error:null};
+      return {data,error:null};
+    }
+    const targets=rows.filter(r=>match(r,s.filters));
+    if (s.action==='update') { targets.forEach(r=>Object.assign(r,s.payload)); saveDemoDB(db); return {data:null,error:null}; }
+    if (s.action==='delete') { db[s.table]=rows.filter(r=>!match(r,s.filters)); saveDemoDB(db); return {data:null,error:null}; }
+    return {data:null,error:null};
+  }
+  return api;
+}
+
+function showLogin() {
+  document.body.classList.remove('app-ready');
+  document.getElementById('auth-screen').hidden=false;
+  document.querySelectorAll('#sidebar,#main-wrapper').forEach(el=>el.style.display='none');
+}
+function hideLogin() {
+  document.body.classList.add('app-ready');
+  document.getElementById('auth-screen').hidden=true;
+  document.querySelector('#sidebar').style.display='';
+  document.querySelector('#main-wrapper').style.display='';
+}
+function loginError(message) {
+  const el=document.getElementById('login-error');
+  el.textContent=message; el.hidden=false;
+}
+async function startRealSession() {
+  demoMode=false; sb=realSb; hideLogin();
+  document.body.classList.remove('demo-mode');
+  try { await loadGlobal(); } catch(e) { console.error(e); toast('Erro de conexão com o banco de dados.','error'); }
+  router();
+}
+async function startDemoSession() {
+  demoMode=true; sb=makeDemoClient();
+  localStorage.setItem('manutencao_demo_session','1');
+  hideLogin();
+  document.body.classList.add('demo-mode');
+  await loadGlobal(true);
+  router();
+}
+async function logout() {
+  if (demoMode) {
+    localStorage.removeItem('manutencao_demo_session');
+    demoMode=false; sb=realSb; G._loaded=false; G._loadingPromise=null;
+    showLogin(); return;
+  }
+  await realSb.auth.signOut();
+  G._loaded=false; G._loadingPromise=null;
+  showLogin();
+}
+
 
 // ─── Estado Global ────────────────────────────────────
 const G = {
@@ -1676,15 +1828,51 @@ function svgCode()      { return `<svg ${svgAttrs}><polyline points="16 18 22 12
    INICIALIZAÇÃO
    ===================================================== */
 window.addEventListener('DOMContentLoaded', async () => {
-  try {
-    await loadGlobal();
-  } catch (err) {
-    console.error('Erro ao conectar ao Supabase:', err);
-    toast('Erro de conexão com o banco de dados.', 'error');
+  const form=document.getElementById('login-form');
+  const button=document.getElementById('login-button');
+  const demoButton=document.getElementById('demo-button');
+
+  form.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const email=document.getElementById('login-email').value.trim();
+    const password=document.getElementById('login-password').value;
+    document.getElementById('login-error').hidden=true;
+    button.disabled=true;
+    button.textContent='Entrando...';
+
+    // Credenciais públicas de demonstração: nunca acessam o Supabase.
+    if (email === 'demo@portfolio.local' && password === 'demo1234') {
+      button.disabled=false; button.textContent='Entrar';
+      await startDemoSession();
+      return;
+    }
+
+    const { error } = await realSb.auth.signInWithPassword({email,password});
+    if (error) {
+      loginError('E-mail ou senha inválidos.');
+      button.disabled=false; button.textContent='Entrar';
+      return;
+    }
+    button.disabled=false; button.textContent='Entrar';
+    await startRealSession();
+  });
+
+  demoButton.addEventListener('click', startDemoSession);
+  window.addEventListener('hashchange', router);
+
+  const demoSession=localStorage.getItem('manutencao_demo_session')==='1';
+  if (demoSession) {
+    await startDemoSession();
+    return;
   }
 
-  window.addEventListener('hashchange', router);
-  router();
+  const { data:{ session } } = await realSb.auth.getSession();
+  if (session) await startRealSession();
+  else showLogin();
+
+  realSb.auth.onAuthStateChange(async (_event, session) => {
+    if (!session && !demoMode) showLogin();
+  });
 });
 
 // Expor funções globais chamadas via onclick no HTML
@@ -1696,6 +1884,6 @@ Object.assign(window, {
   saveNota, deleteNota, printNota,
   renderMateriais, showMaterialModal, saveMaterial, deleteMaterial,
   gerarRelatorioOS, gerarRelatorioCompras, printRelatorioOS, printRelatorioCompras,
-  renderConfiguracoes, showEscolaModal, saveEscola, deleteEscola,
+  renderConfiguracoes, showEscolaModal, saveEscola, deleteEscola, logout,
   renderOsForm, renderComprasForm, G,
 });
