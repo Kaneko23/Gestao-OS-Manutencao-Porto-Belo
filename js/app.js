@@ -13,30 +13,30 @@ const DEMO_KEY = 'manutencao_escolar_demo_v1';
 function demoSeed() {
   return {
     escolas: [
-      {id:'d-escola-1',nome:'Escola Modelo Jardim',email:'demo@exemplo.local',created_at:'2026-08-01T10:00:00Z'},
-      {id:'d-escola-2',nome:'Centro Educacional Aurora',email:'demo@exemplo.local',created_at:'2026-08-02T10:00:00Z'},
-      {id:'d-escola-3',nome:'EM Prof. João Silva',email:'demo@exemplo.local',created_at:'2026-08-03T10:00:00Z'}
+      { id: 'd-escola-1', nome: 'Escola Modelo Jardim', email: 'demo@exemplo.local', created_at: '2026-08-01T10:00:00Z' },
+      { id: 'd-escola-2', nome: 'Centro Educacional Aurora', email: 'demo@exemplo.local', created_at: '2026-08-02T10:00:00Z' },
+      { id: 'd-escola-3', nome: 'EM Prof. João Silva', email: 'demo@exemplo.local', created_at: '2026-08-03T10:00:00Z' }
     ],
     materiais: [
-      {id:'d-mat-1',nome:'Lâmpada LED 12W',unidade:'un',custo_ref:18,created_at:'2026-08-01T10:00:00Z'},
-      {id:'d-mat-2',nome:'Torneira de pia',unidade:'un',custo_ref:45,created_at:'2026-08-01T10:00:00Z'},
-      {id:'d-mat-3',nome:'Cano PVC 50mm',unidade:'m',custo_ref:8,created_at:'2026-08-01T10:00:00Z'}
+      { id: 'd-mat-1', nome: 'Lâmpada LED 12W', unidade: 'un', custo_ref: 18, created_at: '2026-08-01T10:00:00Z' },
+      { id: 'd-mat-2', nome: 'Torneira de pia', unidade: 'un', custo_ref: 45, created_at: '2026-08-01T10:00:00Z' },
+      { id: 'd-mat-3', nome: 'Cano PVC 50mm', unidade: 'm', custo_ref: 8, created_at: '2026-08-01T10:00:00Z' }
     ],
     ordens_servico: [
-      {id:'d-os-1',numero:1001,escola_id:'d-escola-1',solicitante:'Ana Souza',descricao_problema:'Lâmpadas queimadas no corredor.',descricao_servico:'Substituição das lâmpadas.',tecnico:'Equipe de manutenção',status:'Aberta',origem:'Manual',data_abertura:'2026-08-12',data_conclusao:null,created_at:'2026-08-12T09:00:00Z'},
-      {id:'d-os-2',numero:1002,escola_id:'d-escola-2',solicitante:'Carlos Lima',descricao_problema:'Vazamento na pia.',descricao_servico:'Troca do sifão e vedação.',tecnico:'Equipe de manutenção',status:'Em Andamento',origem:'Formulario',data_abertura:'2026-08-10',data_conclusao:null,created_at:'2026-08-10T09:00:00Z'},
-      {id:'d-os-3',numero:1003,escola_id:'d-escola-3',solicitante:'Marina Alves',descricao_problema:'Torneira com defeito.',descricao_servico:'Torneira substituída.',tecnico:'Equipe de manutenção',status:'Concluída',origem:'Manual',data_abertura:'2026-08-05',data_conclusao:'2026-08-06',created_at:'2026-08-05T09:00:00Z'}
+      { id: 'd-os-1', numero: 1001, escola_id: 'd-escola-1', solicitante: 'Ana Souza', descricao_problema: 'Lâmpadas queimadas no corredor.', descricao_servico: 'Substituição das lâmpadas.', tecnico: 'Equipe de manutenção', status: 'Aberta', origem: 'Manual', data_abertura: '2026-08-12', data_conclusao: null, created_at: '2026-08-12T09:00:00Z' },
+      { id: 'd-os-2', numero: 1002, escola_id: 'd-escola-2', solicitante: 'Carlos Lima', descricao_problema: 'Vazamento na pia.', descricao_servico: 'Troca do sifão e vedação.', tecnico: 'Equipe de manutenção', status: 'Em Andamento', origem: 'Formulario', data_abertura: '2026-08-10', data_conclusao: null, created_at: '2026-08-10T09:00:00Z' },
+      { id: 'd-os-3', numero: 1003, escola_id: 'd-escola-3', solicitante: 'Marina Alves', descricao_problema: 'Torneira com defeito.', descricao_servico: 'Torneira substituída.', tecnico: 'Equipe de manutenção', status: 'Concluída', origem: 'Manual', data_abertura: '2026-08-05', data_conclusao: '2026-08-06', created_at: '2026-08-05T09:00:00Z' }
     ],
     os_materiais: [
-      {id:'d-oi-1',os_id:'d-os-3',material_id:'d-mat-2',descricao:'Torneira de pia',quantidade:1,custo_unitario:45,created_at:'2026-08-06T09:00:00Z'}
+      { id: 'd-oi-1', os_id: 'd-os-3', material_id: 'd-mat-2', descricao: 'Torneira de pia', quantidade: 1, custo_unitario: 45, created_at: '2026-08-06T09:00:00Z' }
     ],
     notas_compra: [
-      {id:'d-nota-1',numero:501,data_compra:'2026-08-08',fornecedor:'Fornecedor Demonstrativo',responsavel_compra:'Usuário Demo',responsavel_autorizacao:'Gestão Demo',valor_total:126,status:'Autorizada',observacoes:'Registro fictício para apresentação.',created_at:'2026-08-08T09:00:00Z'}
+      { id: 'd-nota-1', numero: 501, data_compra: '2026-08-08', fornecedor: 'Fornecedor Demonstrativo', responsavel_compra: 'Usuário Demo', responsavel_autorizacao: 'Gestão Demo', valor_total: 126, status: 'Autorizada', observacoes: 'Registro fictício para apresentação.', created_at: '2026-08-08T09:00:00Z' }
     ],
     itens_compra: [
-      {id:'d-item-1',nota_compra_id:'d-nota-1',material_id:'d-mat-1',descricao:'Lâmpada LED 12W',quantidade:3,custo_unitario:18,data_retirada:'2026-08-09',escola_id:'d-escola-1',os_id:'d-os-1',created_at:'2026-08-09T09:00:00Z'},
-      {id:'d-item-2',nota_compra_id:'d-nota-1',material_id:'d-mat-2',descricao:'Torneira de pia',quantidade:1,custo_unitario:45,data_retirada:'2026-08-09',escola_id:'d-escola-2',os_id:'d-os-2',created_at:'2026-08-09T09:00:00Z'},
-      {id:'d-item-3',nota_compra_id:'d-nota-1',material_id:'d-mat-3',descricao:'Cano PVC 50mm',quantidade:3,custo_unitario:8,data_retirada:'2026-08-09',escola_id:'d-escola-2',os_id:'d-os-2',created_at:'2026-08-09T09:00:00Z'}
+      { id: 'd-item-1', nota_compra_id: 'd-nota-1', material_id: 'd-mat-1', descricao: 'Lâmpada LED 12W', quantidade: 3, custo_unitario: 18, data_retirada: '2026-08-09', escola_id: 'd-escola-1', os_id: 'd-os-1', created_at: '2026-08-09T09:00:00Z' },
+      { id: 'd-item-2', nota_compra_id: 'd-nota-1', material_id: 'd-mat-2', descricao: 'Torneira de pia', quantidade: 1, custo_unitario: 45, data_retirada: '2026-08-09', escola_id: 'd-escola-2', os_id: 'd-os-2', created_at: '2026-08-09T09:00:00Z' },
+      { id: 'd-item-3', nota_compra_id: 'd-nota-1', material_id: 'd-mat-3', descricao: 'Cano PVC 50mm', quantidade: 3, custo_unitario: 8, data_retirada: '2026-08-09', escola_id: 'd-escola-2', os_id: 'd-os-2', created_at: '2026-08-09T09:00:00Z' }
     ]
   };
 }
@@ -45,7 +45,7 @@ function getDemoDB() {
   try {
     const raw = localStorage.getItem(DEMO_KEY);
     if (raw) return JSON.parse(raw);
-  } catch(e) {}
+  } catch (e) { }
   const db = demoSeed();
   localStorage.setItem(DEMO_KEY, JSON.stringify(db));
   return db;
@@ -56,17 +56,17 @@ function makeDemoClient() {
   const db = getDemoDB();
   const api = {
     from(table) {
-      const state = { table, action:'select', columns:'*', filters:[], orderBy:null, single:false, payload:null };
+      const state = { table, action: 'select', columns: '*', filters: [], orderBy: null, single: false, payload: null };
       const builder = {
-        select(columns='*') { state.columns=columns; return builder; },
-        order(column, opts={}) { state.orderBy={column, ascending: opts.ascending !== false}; return builder; },
-        eq(column,value) { state.filters.push([column,value]); return builder; },
-        single() { state.single=true; return builder; },
-        insert(payload) { state.action='insert'; state.payload=payload; return builder; },
-        update(payload) { state.action='update'; state.payload=payload; return builder; },
-        delete() { state.action='delete'; return builder; },
-        then(resolve,reject) {
-          try { resolve(executeDemoQuery(state)); } catch(e) { if(reject) reject(e); else throw e; }
+        select(columns = '*') { state.columns = columns; return builder; },
+        order(column, opts = {}) { state.orderBy = { column, ascending: opts.ascending !== false }; return builder; },
+        eq(column, value) { state.filters.push([column, value]); return builder; },
+        single() { state.single = true; return builder; },
+        insert(payload) { state.action = 'insert'; state.payload = payload; return builder; },
+        update(payload) { state.action = 'update'; state.payload = payload; return builder; },
+        delete() { state.action = 'delete'; return builder; },
+        then(resolve, reject) {
+          try { resolve(executeDemoQuery(state)); } catch (e) { if (reject) reject(e); else throw e; }
         }
       };
       return builder;
@@ -74,73 +74,73 @@ function makeDemoClient() {
   };
 
   function clone(v) { return JSON.parse(JSON.stringify(v)); }
-  function match(row, filters) { return filters.every(([k,v]) => String(row[k]) === String(v)); }
+  function match(row, filters) { return filters.every(([k, v]) => String(row[k]) === String(v)); }
 
   function enrich(row, columns) {
-    const out=clone(row);
+    const out = clone(row);
     if (columns && columns.includes('escola:escola_id(nome)')) {
-      const e=db.escolas.find(x=>x.id===row.escola_id);
-      out.escola=e ? {nome:e.nome} : null;
+      const e = db.escolas.find(x => x.id === row.escola_id);
+      out.escola = e ? { nome: e.nome } : null;
     }
     return out;
   }
 
   function executeDemoQuery(s) {
-    let rows=db[s.table] || [];
-    if (s.action==='select') {
-      let data=rows.filter(r=>match(r,s.filters)).map(r=>enrich(r,s.columns));
+    let rows = db[s.table] || [];
+    if (s.action === 'select') {
+      let data = rows.filter(r => match(r, s.filters)).map(r => enrich(r, s.columns));
       if (s.orderBy) {
-        const {column,ascending}=s.orderBy;
-        data.sort((a,b)=>String(a[column]??'').localeCompare(String(b[column]??''),undefined,{numeric:true})*(ascending?1:-1));
+        const { column, ascending } = s.orderBy;
+        data.sort((a, b) => String(a[column] ?? '').localeCompare(String(b[column] ?? ''), undefined, { numeric: true }) * (ascending ? 1 : -1));
       }
-      if (s.single) return {data:data[0]||null,error:data[0]?null:{message:'Registro não encontrado'}};
-      return {data,error:null};
+      if (s.single) return { data: data[0] || null, error: data[0] ? null : { message: 'Registro não encontrado' } };
+      return { data, error: null };
     }
-    if (s.action==='insert') {
-      const payloads=Array.isArray(s.payload)?s.payload:[s.payload];
-      const inserted=payloads.map((p,i)=>{
-        const row={...p,id:p.id||('d-'+s.table+'-'+Date.now()+'-'+i),created_at:p.created_at||new Date().toISOString()};
-        if (s.table==='ordens_servico') row.numero=p.numero||Math.max(0,...rows.map(x=>Number(x.numero)||0))+1;
-        if (s.table==='notas_compra') row.numero=p.numero||Math.max(0,...rows.map(x=>Number(x.numero)||0))+1;
+    if (s.action === 'insert') {
+      const payloads = Array.isArray(s.payload) ? s.payload : [s.payload];
+      const inserted = payloads.map((p, i) => {
+        const row = { ...p, id: p.id || ('d-' + s.table + '-' + Date.now() + '-' + i), created_at: p.created_at || new Date().toISOString() };
+        if (s.table === 'ordens_servico') row.numero = p.numero || Math.max(0, ...rows.map(x => Number(x.numero) || 0)) + 1;
+        if (s.table === 'notas_compra') row.numero = p.numero || Math.max(0, ...rows.map(x => Number(x.numero) || 0)) + 1;
         rows.push(row); return clone(row);
       });
       saveDemoDB(db);
-      const data=inserted.map(r=>enrich(r,s.columns));
-      if (s.single) return {data:data[0],error:null};
-      return {data,error:null};
+      const data = inserted.map(r => enrich(r, s.columns));
+      if (s.single) return { data: data[0], error: null };
+      return { data, error: null };
     }
-    const targets=rows.filter(r=>match(r,s.filters));
-    if (s.action==='update') { targets.forEach(r=>Object.assign(r,s.payload)); saveDemoDB(db); return {data:null,error:null}; }
-    if (s.action==='delete') { db[s.table]=rows.filter(r=>!match(r,s.filters)); saveDemoDB(db); return {data:null,error:null}; }
-    return {data:null,error:null};
+    const targets = rows.filter(r => match(r, s.filters));
+    if (s.action === 'update') { targets.forEach(r => Object.assign(r, s.payload)); saveDemoDB(db); return { data: null, error: null }; }
+    if (s.action === 'delete') { db[s.table] = rows.filter(r => !match(r, s.filters)); saveDemoDB(db); return { data: null, error: null }; }
+    return { data: null, error: null };
   }
   return api;
 }
 
 function showLogin() {
   document.body.classList.remove('app-ready');
-  document.getElementById('auth-screen').hidden=false;
-  document.querySelectorAll('#sidebar,#main-wrapper').forEach(el=>el.style.display='none');
+  document.getElementById('auth-screen').hidden = false;
+  document.querySelectorAll('#sidebar,#main-wrapper').forEach(el => el.style.display = 'none');
 }
 function hideLogin() {
   document.body.classList.add('app-ready');
-  document.getElementById('auth-screen').hidden=true;
-  document.querySelector('#sidebar').style.display='';
-  document.querySelector('#main-wrapper').style.display='';
+  document.getElementById('auth-screen').hidden = true;
+  document.querySelector('#sidebar').style.display = '';
+  document.querySelector('#main-wrapper').style.display = '';
 }
 function loginError(message) {
-  const el=document.getElementById('login-error');
-  el.textContent=message; el.hidden=false;
+  const el = document.getElementById('login-error');
+  el.textContent = message; el.hidden = false;
 }
 async function startRealSession() {
-  demoMode=false; sb=realSb; hideLogin();
+  demoMode = false; sb = realSb; hideLogin();
   document.body.classList.remove('demo-mode');
-  try { await loadGlobal(); } catch(e) { console.error(e); toast('Erro de conexão com o banco de dados.','error'); }
+  try { await loadGlobal(); } catch (e) { console.error(e); toast('Erro de conexão com o banco de dados.', 'error'); }
   router();
 }
 async function startDemoSession() {
-  demoMode=true; sb=makeDemoClient();
-  localStorage.setItem('manutencao_demo_session','1');
+  demoMode = true; sb = makeDemoClient();
+  localStorage.setItem('manutencao_demo_session', '1');
   hideLogin();
   document.body.classList.add('demo-mode');
   await loadGlobal(true);
@@ -149,11 +149,11 @@ async function startDemoSession() {
 async function logout() {
   if (demoMode) {
     localStorage.removeItem('manutencao_demo_session');
-    demoMode=false; sb=realSb; G._loaded=false; G._loadingPromise=null;
+    demoMode = false; sb = realSb; G._loaded = false; G._loadingPromise = null;
     showLogin(); return;
   }
   await realSb.auth.signOut();
-  G._loaded=false; G._loadingPromise=null;
+  G._loaded = false; G._loadingPromise = null;
   showLogin();
 }
 
@@ -171,19 +171,19 @@ const fmt = {
   currency: v => 'R$ ' + Number(v || 0).toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 }),
   date: d => d ? new Date(d + 'T12:00:00').toLocaleDateString('pt-BR') : '—',
   today: () => new Date().toISOString().split('T')[0],
-  monthName: m => ['Janeiro','Fevereiro','Março','Abril','Maio','Junho','Julho','Agosto','Setembro','Outubro','Novembro','Dezembro'][m - 1],
+  monthName: m => ['Janeiro', 'Fevereiro', 'Março', 'Abril', 'Maio', 'Junho', 'Julho', 'Agosto', 'Setembro', 'Outubro', 'Novembro', 'Dezembro'][m - 1],
 };
 
 function badgeStatus(status) {
   const map = {
-    'Aberta':      'badge-aberta',
-    'Em Andamento':'badge-andamento',
-    'Concluída':   'badge-concluida',
-    'Pendente':    'badge-andamento',
-    'Autorizada':  'badge-ativa',
+    'Aberta': 'badge-aberta',
+    'Em Andamento': 'badge-andamento',
+    'Concluída': 'badge-concluida',
+    'Pendente': 'badge-andamento',
+    'Autorizada': 'badge-ativa',
     'Concluída/Paga': 'badge-concluida',
-    'Ativa':       'badge-ativa',
-    'Encerrada':   'badge-encerrada',
+    'Ativa': 'badge-ativa',
+    'Encerrada': 'badge-encerrada',
   };
   return `<span class="badge ${map[status] || ''}">${status}</span>`;
 }
@@ -219,7 +219,7 @@ function escAttr(s) {
 function toast(msg, type = 'success') {
   const icons = {
     success: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 13l4 4L19 7"/></svg>`,
-    error:   `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 18L18 6M6 6l12 12"/></svg>`,
+    error: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 18L18 6M6 6l12 12"/></svg>`,
     warning: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 9v4m0 4h.01M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z"/></svg>`,
   };
   const el = document.createElement('div');
@@ -245,7 +245,7 @@ function confirmDialog(msg) {
       </div>`;
     document.body.appendChild(bd);
     bd.querySelector('#conf-yes').onclick = () => { bd.remove(); resolve(true); };
-    bd.querySelector('#conf-no').onclick  = () => { bd.remove(); resolve(false); };
+    bd.querySelector('#conf-no').onclick = () => { bd.remove(); resolve(false); };
     bd.onclick = e => { if (e.target === bd) { bd.remove(); resolve(false); } };
   });
 }
@@ -289,7 +289,7 @@ async function loadGlobal(force = false) {
       sb.from('escolas').select('*').order('nome'),
       sb.from('materiais').select('*').order('nome'),
     ]);
-    G.escolas   = e.data || [];
+    G.escolas = e.data || [];
     G.materiais = m.data || [];
     G._loaded = true;
   })();
@@ -314,31 +314,31 @@ function escolaFilterOptions() {
 
 // ─── Router ───────────────────────────────────────────
 function router() {
-  const hash  = location.hash.replace('#/', '') || 'dashboard';
+  const hash = location.hash.replace('#/', '') || 'dashboard';
   const parts = hash.split('/');
-  const page  = parts[0];
-  const id    = parts[1];
+  const page = parts[0];
+  const id = parts[1];
 
   document.querySelectorAll('.nav-item').forEach(el => {
     el.classList.toggle('active', el.dataset.page === page);
   });
 
   switch (page) {
-    case 'dashboard':    renderDashboard();          break;
+    case 'dashboard': renderDashboard(); break;
     case 'os':
-      if (id === 'new')  renderOsForm();
-      else if (id)       renderOsDetail(id);
-      else               renderOsList();
+      if (id === 'new') renderOsForm();
+      else if (id) renderOsDetail(id);
+      else renderOsList();
       break;
     case 'compras':
-      if (id === 'new')  renderComprasForm();
-      else if (id)       renderComprasDetail(id);
-      else               renderComprasList();
+      if (id === 'new') renderComprasForm();
+      else if (id) renderComprasDetail(id);
+      else renderComprasList();
       break;
-    case 'materiais':    renderMateriais();          break;
-    case 'relatorios':   renderRelatorios();         break;
-    case 'configuracoes': renderConfiguracoes();     break;
-    default:             renderDashboard();
+    case 'materiais': renderMateriais(); break;
+    case 'relatorios': renderRelatorios(); break;
+    case 'configuracoes': renderConfiguracoes(); break;
+    default: renderDashboard();
   }
 }
 
@@ -356,8 +356,8 @@ async function renderDashboard() {
     sb.from('itens_compra').select('quantidade, data_retirada'),
   ]);
 
-  const osAbertas    = (os || []).filter(o => o.status === 'Aberta').length;
-  const osAndamento  = (os || []).filter(o => o.status === 'Em Andamento').length;
+  const osAbertas = (os || []).filter(o => o.status === 'Aberta').length;
+  const osAndamento = (os || []).filter(o => o.status === 'Em Andamento').length;
   const osConcluidas = (os || []).filter(o => o.status === 'Concluída').length;
   const osFormulario = (os || []).filter(o => o.origem === 'Formulario').length;
 
@@ -416,8 +416,8 @@ async function renderDashboard() {
           <button class="btn btn-outline btn-sm" onclick="navigate('os')">Ver todas</button>
         </div>
         <div class="card-body">
-          ${[['Aberta', osAbertas, 'badge-aberta'],['Em Andamento', osAndamento, 'badge-andamento'],['Concluída', osConcluidas, 'badge-concluida']]
-            .map(([s, n, cls]) => `
+          ${[['Aberta', osAbertas, 'badge-aberta'], ['Em Andamento', osAndamento, 'badge-andamento'], ['Concluída', osConcluidas, 'badge-concluida']]
+      .map(([s, n, cls]) => `
             <div style="display:flex;align-items:center;justify-content:space-between;padding:12px 0;border-bottom:1px solid var(--slate-100)">
               <span class="badge ${cls}">${s}</span>
               <strong style="font-size:18px">${n}</strong>
@@ -524,10 +524,10 @@ async function renderOsList() {
         </tr></thead>
         <tbody>
           ${lista.map(os => {
-            const matTexto = formatarMateriaisTexto(os.os_materiais);
-            const matTextoPlano = (os.os_materiais || []).map(i => i.descricao).join(' '); // sem HTML, só para busca
-            const desc = escAttr((os.descricao_problema + ' ' + os.solicitante + ' ' + os.numero + ' ' + matTextoPlano).toLowerCase());
-            return `
+    const matTexto = formatarMateriaisTexto(os.os_materiais);
+    const matTextoPlano = (os.os_materiais || []).map(i => i.descricao).join(' '); // sem HTML, só para busca
+    const desc = escAttr((os.descricao_problema + ' ' + os.solicitante + ' ' + os.numero + ' ' + matTextoPlano).toLowerCase());
+    return `
             <tr data-escola-id="${os.escola_id || ''}" data-escola-nome="${escAttr((os.escola?.nome || '').toLowerCase())}" data-desc="${desc}" data-status="${escAttr(os.status)}" data-origem="${escAttr(os.origem || 'Manual')}" data-data="${os.data_abertura}">              <td><strong class="text-blue">#${os.numero}</strong></td>
               <td>${os.origem === 'Formulario' ? '<span class="badge badge-ativa">Formulário</span>' : '<span class="badge badge-aberta">Manual</span>'}</td>
               <td>${fmt.date(os.data_abertura)}</td>
@@ -541,7 +541,7 @@ async function renderOsList() {
                 <button class="btn btn-ghost btn-sm btn-icon text-red" title="Excluir" onclick="deleteOs('${os.id}','${os.numero}')">${svgTrash()}</button>
               </div></td>
             </tr>`;
-          }).join('')}
+  }).join('')}
         </tbody>
       </table>
     </div>
@@ -649,8 +649,8 @@ async function renderOsForm(id) {
             <div class="form-group">
               <label>Status</label>
               <select name="status">
-                ${['Aberta','Em Andamento','Concluída'].map(s =>
-                  `<option ${(os?.status || 'Aberta') === s ? 'selected' : ''}>${s}</option>`).join('')}
+                ${['Aberta', 'Em Andamento', 'Concluída'].map(s =>
+    `<option ${(os?.status || 'Aberta') === s ? 'selected' : ''}>${s}</option>`).join('')}
               </select>
             </div>
             <div class="form-group">
@@ -728,7 +728,7 @@ function removeOsItem(i) {
   renderOsItens();
 }
 
-function updateOsTotal() {}
+function updateOsTotal() { }
 
 async function saveOs(e, id) {
   e.preventDefault();
@@ -738,14 +738,14 @@ async function saveOs(e, id) {
   btn.textContent = 'Salvando...';
 
   const payload = {
-    escola_id:          form.escola_id.value || null,
-    solicitante:        form.solicitante.value,
-    tecnico:            form.tecnico.value,
-    status:             form.status.value,
-    data_abertura:      form.data_abertura.value,
-    data_conclusao:     form.data_conclusao.value || null,
+    escola_id: form.escola_id.value || null,
+    solicitante: form.solicitante.value,
+    tecnico: form.tecnico.value,
+    status: form.status.value,
+    data_abertura: form.data_abertura.value,
+    data_conclusao: form.data_conclusao.value || null,
     descricao_problema: form.descricao_problema.value,
-    descricao_servico:  form.descricao_servico.value,
+    descricao_servico: form.descricao_servico.value,
   };
 
   let osId = id;
@@ -988,10 +988,10 @@ async function renderComprasList() {
         </tr></thead>
         <tbody>
           ${lista.map(nc => {
-            const escolasDestino = Array.from(new Set((nc.itens_compra || []).map(i => i.escola?.nome).filter(Boolean))).join(', ');
-            const escolaIds = (nc.itens_compra || []).map(i => i.escola_id).filter(Boolean).join(',');
-            const totalQtd = (nc.itens_compra || []).reduce((s, i) => s + Number(i.quantidade || 0), 0);
-            return `
+    const escolasDestino = Array.from(new Set((nc.itens_compra || []).map(i => i.escola?.nome).filter(Boolean))).join(', ');
+    const escolaIds = (nc.itens_compra || []).map(i => i.escola_id).filter(Boolean).join(',');
+    const totalQtd = (nc.itens_compra || []).reduce((s, i) => s + Number(i.quantidade || 0), 0);
+    return `
             <tr data-forn="${escAttr((nc.fornecedor || '').toLowerCase())}" data-resp="${escAttr((nc.responsavel_compra + ' ' + nc.responsavel_autorizacao + ' ' + nc.numero).toLowerCase())}" data-escolas-id="${escolaIds}" data-status="${escAttr(nc.status)}" data-data="${nc.data_compra}">
               <td><strong class="text-blue">Nota #${nc.numero}</strong></td>
               <td>${fmt.date(nc.data_compra)}</td>
@@ -1006,7 +1006,7 @@ async function renderComprasList() {
                 <button class="btn btn-ghost btn-sm btn-icon text-red" title="Excluir" onclick="deleteNota('${nc.id}','${nc.numero}')">${svgTrash()}</button>
               </div></td>
             </tr>`;
-          }).join('')}
+  }).join('')}
         </tbody>
       </table>
     </div>
@@ -1154,7 +1154,7 @@ function removeNotaItem(i) {
   renderNotaItens();
 }
 
-function updateNotaTotal() {}
+function updateNotaTotal() { }
 
 async function saveNota(e, id) {
   e.preventDefault();
@@ -1163,13 +1163,13 @@ async function saveNota(e, id) {
   btn.disabled = true; btn.textContent = 'Salvando...';
 
   const payload = {
-    data_compra:             form.data_compra.value,
-    fornecedor:              form.fornecedor.value,
-    responsavel_compra:      form.responsavel_compra.value,
+    data_compra: form.data_compra.value,
+    fornecedor: form.fornecedor.value,
+    responsavel_compra: form.responsavel_compra.value,
     responsavel_autorizacao: form.responsavel_autorizacao.value,
-    status:                  form.status.value,
-    observacoes:             form.observacoes.value,
-    valor_total:             0,
+    status: form.status.value,
+    observacoes: form.observacoes.value,
+    valor_total: 0,
   };
 
   let notaId = id;
@@ -1187,11 +1187,11 @@ async function saveNota(e, id) {
   if (itens.length) {
     await sb.from('itens_compra').insert(itens.map(i => ({
       nota_compra_id: notaId,
-      descricao:       i.descricao,
-      quantidade:      parseFloat(i.quantidade) || 1,
-      custo_unitario:  0,
-      escola_id:       i.escola_id || null,
-      data_retirada:   form.data_compra.value
+      descricao: i.descricao,
+      quantidade: parseFloat(i.quantidade) || 1,
+      custo_unitario: 0,
+      escola_id: i.escola_id || null,
+      data_retirada: form.data_compra.value
     })));
   }
 
@@ -1395,7 +1395,7 @@ function showMaterialModal() {
             <div class="form-group span-full">
               <label>Unidade de Medida *</label>
               <select name="unidade">
-                ${['un','m','m²','m³','kg','L','rolo','saco','balde','lata','cx','par','jogo'].map(u => `<option>${u}</option>`).join('')}
+                ${['un', 'm', 'm²', 'm³', 'kg', 'L', 'rolo', 'saco', 'balde', 'lata', 'cx', 'par', 'jogo'].map(u => `<option>${u}</option>`).join('')}
               </select>
             </div>
           </div>
@@ -1547,8 +1547,8 @@ async function gerarRelatorioOS() {
       </div>
       <div style="padding:14px 24px;background:var(--primary-light);display:flex;gap:28px;flex-wrap:wrap">
         <div><span style="font-size:11px;color:var(--slate-500);font-weight:700">Total de OS</span><br><strong style="font-size:18px">${os.length}</strong></div>
-        <div><span style="font-size:11px;color:var(--slate-500);font-weight:700">Via Form Google</span><br><strong style="font-size:18px">${os.filter(o=>o.origem==='Formulario').length}</strong></div>
-        <div><span style="font-size:11px;color:var(--slate-500);font-weight:700">Concluídas</span><br><strong style="font-size:18px" class="text-green">${os.filter(o=>o.status==='Concluída').length}</strong></div>
+        <div><span style="font-size:11px;color:var(--slate-500);font-weight:700">Via Form Google</span><br><strong style="font-size:18px">${os.filter(o => o.origem === 'Formulario').length}</strong></div>
+        <div><span style="font-size:11px;color:var(--slate-500);font-weight:700">Concluídas</span><br><strong style="font-size:18px" class="text-green">${os.filter(o => o.status === 'Concluída').length}</strong></div>
       </div>
       <div class="table-wrapper" style="border:none;border-radius:0;box-shadow:none">
         <table>
@@ -1558,9 +1558,9 @@ async function gerarRelatorioOS() {
                 <td class="text-blue text-bold">#${o.numero}</td>
                 <td>${o.origem === 'Formulario' ? '<span class="badge badge-ativa">Form</span>' : '<span class="badge badge-aberta">Manual</span>'}</td>
                 <td>${fmt.date(o.data_abertura)}</td>
-                <td><strong>${o.escola?.nome||'—'}</strong></td>
+                <td><strong>${o.escola?.nome || '—'}</strong></td>
                 <td style="max-width:200px">${o.descricao_problema}</td>
-                <td style="max-width:180px">${o.descricao_servico||'—'}</td>
+                <td style="max-width:180px">${o.descricao_servico || '—'}</td>
                 <td style="max-width:220px"><strong>${formatarMateriaisTexto(o.os_materiais)}</strong></td>
                 <td>${badgeStatus(o.status)}</td>
               </tr>`).join('')}
@@ -1626,7 +1626,7 @@ async function gerarRelatorioCompras() {
               <strong class="text-blue">Nota #${n.numero}</strong> — ${n.fornecedor} (${fmt.date(n.data_compra)})
               <span style="font-size:11px;color:var(--slate-500);margin-left:10px">Buscou: ${n.responsavel_compra || '—'} | Autorizou: ${n.responsavel_autorizacao || '—'}</span>
             </div>
-            <span class="badge badge-ativa">${n.itens_compra.reduce((s,i)=>s+Number(i.quantidade||0),0)} itens</span>
+            <span class="badge badge-ativa">${n.itens_compra.reduce((s, i) => s + Number(i.quantidade || 0), 0)} itens</span>
           </div>
           <div class="table-wrapper" style="border:none;border-radius:0;box-shadow:none">
             <table>
@@ -1670,13 +1670,13 @@ function printRelatorioOS(dtIni, dtFim, filtroEscola) {
     <h2>Período: ${fmt.date(dtIni)} a ${fmt.date(dtFim)} — ${filtroEscola || 'Todas as Escolas'}</h2>
     <div class="summary">
       <div><strong>Total de OS:</strong> ${d.os.length}</div>
-      <div><strong>Via Form Google:</strong> ${d.os.filter(o=>o.origem==='Formulario').length}</div>
-      <div><strong>Concluídas:</strong> ${d.os.filter(o=>o.status==='Concluída').length}</div>
+      <div><strong>Via Form Google:</strong> ${d.os.filter(o => o.origem === 'Formulario').length}</div>
+      <div><strong>Concluídas:</strong> ${d.os.filter(o => o.status === 'Concluída').length}</div>
     </div>
     <table>
       <thead><tr><th>Nº</th><th>Origem</th><th>Data</th><th>Escola / Setor</th><th>Problema</th><th>Serviço Realizado</th><th>Materiais Utilizados</th><th>Status</th></tr></thead>
       <tbody>
-        ${d.os.map(o=>`<tr><td>#${o.numero}</td><td>${o.origem}</td><td>${fmt.date(o.data_abertura)}</td><td>${o.escola?.nome||'—'}</td><td>${o.descricao_problema}</td><td>${o.descricao_servico||'—'}</td><td>${formatarMateriaisTexto(o.os_materiais)}</td><td>${o.status}</td></tr>`).join('')}
+        ${d.os.map(o => `<tr><td>#${o.numero}</td><td>${o.origem}</td><td>${fmt.date(o.data_abertura)}</td><td>${o.escola?.nome || '—'}</td><td>${o.descricao_problema}</td><td>${o.descricao_servico || '—'}</td><td>${formatarMateriaisTexto(o.os_materiais)}</td><td>${o.status}</td></tr>`).join('')}
       </tbody>
     </table>
   </body></html>`);
@@ -1704,12 +1704,12 @@ function printRelatorioCompras(dtIni, dtFim, filtroEscola) {
       <div><strong>Total de Notas:</strong> ${d.notas.length}</div>
       <div><strong>Total de Itens Pegos:</strong> ${d.totalItens} item(ns)</div>
     </div>
-    ${d.notas.map(n=>`
+    ${d.notas.map(n => `
       <div class="nc-header">Nota #${n.numero} — ${n.fornecedor} (${fmt.date(n.data_compra)}) | Buscou: ${n.responsavel_compra || '—'} | Autorizou: ${n.responsavel_autorizacao || '—'}</div>
       <table>
         <thead><tr><th>Material Pego</th><th>Quantidade Pega</th><th>Destino (Escola/Setor)</th></tr></thead>
         <tbody>
-          ${(n.itens_compra||[]).map(i=>`<tr><td>${i.descricao}</td><td>${Number(i.quantidade).toLocaleString('pt-BR')} item(ns)</td><td>${i.escola?.nome||'Estoque / Geral'}</td></tr>`).join('')}
+          ${(n.itens_compra || []).map(i => `<tr><td>${i.descricao}</td><td>${Number(i.quantidade).toLocaleString('pt-BR')} item(ns)</td><td>${i.escola?.nome || 'Estoque / Geral'}</td></tr>`).join('')}
         </tbody>
       </table>`).join('')}
   </body></html>`);
@@ -1810,78 +1810,106 @@ async function deleteEscola(id, nome) {
 const svgAttrs = `viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"`;
 
 function svgClipboard() { return `<svg ${svgAttrs}><path d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01M9 16h.01"/></svg>`; }
-function svgCheck()     { return `<svg ${svgAttrs}><path d="M5 13l4 4L19 7"/></svg>`; }
-function svgCart()      { return `<svg ${svgAttrs}><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 001.99 1.61h9.72a2 2 0 001.99-1.61L23 6H6"/></svg>`; }
-function svgMoney()     { return `<svg ${svgAttrs}><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 000 7h5a3.5 3.5 0 010 7H6"/></svg>`; }
-function svgChart()     { return `<svg ${svgAttrs}><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>`; }
-function svgPlus()      { return `<svg ${svgAttrs}><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>`; }
-function svgEye()       { return `<svg ${svgAttrs}><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>`; }
-function svgTrash()     { return `<svg ${svgAttrs}><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 01-2 2H8a2 2 0 01-2-2L5 6m3 0V4a1 1 0 011-1h4a1 1 0 011 1v2"/></svg>`; }
-function svgEdit()      { return `<svg ${svgAttrs}><path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>`; }
-function svgPrint()     { return `<svg ${svgAttrs}><polyline points="6 9 6 2 18 2 18 9"/><path d="M6 18H4a2 2 0 01-2-2v-5a2 2 0 012-2h16a2 2 0 012 2v5a2 2 0 01-2 2h-2"/><rect x="6" y="14" width="12" height="8"/></svg>`; }
+function svgCheck() { return `<svg ${svgAttrs}><path d="M5 13l4 4L19 7"/></svg>`; }
+function svgCart() { return `<svg ${svgAttrs}><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 001.99 1.61h9.72a2 2 0 001.99-1.61L23 6H6"/></svg>`; }
+function svgMoney() { return `<svg ${svgAttrs}><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 000 7h5a3.5 3.5 0 010 7H6"/></svg>`; }
+function svgChart() { return `<svg ${svgAttrs}><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>`; }
+function svgPlus() { return `<svg ${svgAttrs}><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>`; }
+function svgEye() { return `<svg ${svgAttrs}><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>`; }
+function svgTrash() { return `<svg ${svgAttrs}><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 01-2 2H8a2 2 0 01-2-2L5 6m3 0V4a1 1 0 011-1h4a1 1 0 011 1v2"/></svg>`; }
+function svgEdit() { return `<svg ${svgAttrs}><path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>`; }
+function svgPrint() { return `<svg ${svgAttrs}><polyline points="6 9 6 2 18 2 18 9"/><path d="M6 18H4a2 2 0 01-2-2v-5a2 2 0 012-2h16a2 2 0 012 2v5a2 2 0 01-2 2h-2"/><rect x="6" y="14" width="12" height="8"/></svg>`; }
 function svgArrowLeft() { return `<svg ${svgAttrs}><line x1="19" y1="12" x2="5" y2="12"/><polyline points="12 19 5 12 12 5"/></svg>`; }
-function svgX()         { return `<svg ${svgAttrs}><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>`; }
-function svgCode()      { return `<svg ${svgAttrs}><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg>`; }
+function svgX() { return `<svg ${svgAttrs}><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>`; }
+function svgCode() { return `<svg ${svgAttrs}><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg>`; }
 
 /* =====================================================
    INICIALIZAÇÃO
    ===================================================== */
 window.addEventListener('DOMContentLoaded', async () => {
-  const form=document.getElementById('login-form');
-  const button=document.getElementById('login-button');
-  const demoButton=document.getElementById('demo-button');
+  const form = document.getElementById('login-form');
+  const button = document.getElementById('login-button');
+  const demoButton = document.getElementById('demo-button');
 
   form.addEventListener('submit', async (e) => {
-  e.preventDefault();
+    e.preventDefault();
 
-  const email = document.getElementById('login-email').value.trim();
-  const password = document.getElementById('login-password').value;
+    const email = document.getElementById('login-email').value.trim();
+    const password = document.getElementById('login-password').value;
 
-  document.getElementById('login-error').hidden = true;
+    document.getElementById('login-error').hidden = true;
 
-  button.disabled = true;
-  button.textContent = 'Entrando...';
+    button.disabled = true;
+    button.textContent = 'Entrando...';
 
-  // Login da demonstração — nunca acessa o Supabase
-  if (email === 'demo@portfolio.local' && password === 'demo1234') {
-    button.disabled = false;
-    button.textContent = 'Entrar';
-    await startDemoSession();
-    return;
-  }
+    // Login da demonstração — nunca acessa o Supabase
+    if (email === 'demo@portfolio.local' && password === 'demo1234') {
+      button.disabled = false;
+      button.textContent = 'Entrar';
+      await startDemoSession();
+      return;
+    }
 
-  // Login real pelo Supabase
-  const { error } = await realSb.auth.signInWithPassword({
-    email,
-    password
+    // Login real pelo Supabase
+    try {
+      const { data, error } = await realSb.auth.signInWithPassword({
+        email,
+        password
+      });
+
+      console.log('LOGIN DATA:', data);
+      console.log('LOGIN ERROR:', error);
+
+      if (error) {
+        console.error('Erro Supabase Auth:', error);
+
+        loginError(error.message);
+
+        button.disabled = false;
+        button.textContent = 'Entrar';
+        return;
+      }
+
+      if (!data || !data.session) {
+        console.error('Login realizado, mas nenhuma sessão foi retornada:', data);
+
+        loginError('Login realizado, mas a sessão não foi criada.');
+
+        button.disabled = false;
+        button.textContent = 'Entrar';
+        return;
+      }
+
+      console.log('LOGIN REALIZADO COM SUCESSO');
+      console.log('Usuário:', data.user?.email);
+
+      button.disabled = false;
+      button.textContent = 'Entrar';
+
+      await startRealSession();
+
+    } catch (err) {
+      console.error('ERRO INESPERADO NO LOGIN:', err);
+
+      loginError(
+        err?.message || 'Ocorreu um erro inesperado ao tentar entrar.'
+      );
+
+      button.disabled = false;
+      button.textContent = 'Entrar';
+    }
   });
-
-  if (error) {
-    console.error('Erro Supabase Auth:', error);
-
-    loginError(error.message);
-
-    button.disabled = false;
-    button.textContent = 'Entrar';
-    return;
-  }
-
-  button.disabled = false;
-  button.textContent = 'Entrar';
-
-  await startRealSession();
-});
 
   demoButton.addEventListener('click', startDemoSession);
   window.addEventListener('hashchange', router);
 
-  const demoSession=localStorage.getItem('manutencao_demo_session')==='1';
+  const demoSession = localStorage.getItem('manutencao_demo_session') === '1';
   if (demoSession) {
     await startDemoSession();
     return;
   }
 
-  const { data:{ session } } = await realSb.auth.getSession();
+  const { data: { session } } = await realSb.auth.getSession();
   if (session) await startRealSession();
   else showLogin();
 
