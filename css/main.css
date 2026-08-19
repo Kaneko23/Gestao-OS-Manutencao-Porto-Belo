@@ -636,3 +636,7 @@ textarea { resize: vertical; min-height: 85px; }
 @media (max-width: 540px) {
   .stats-grid { grid-template-columns: 1fr; }
 }
+
+[hidden] {
+  display: none !important;
+}

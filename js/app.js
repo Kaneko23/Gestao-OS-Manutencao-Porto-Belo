@@ -130,15 +130,25 @@ function makeDemoClient() {
 
 function showLogin() {
   document.body.classList.remove('app-ready');
-  document.getElementById('auth-screen').hidden = false;
+  const authScreen = document.getElementById('auth-screen');
+  if (authScreen) {
+    authScreen.hidden = false;
+    authScreen.style.display = 'flex';
+  }
   document.querySelectorAll('#sidebar,#main-wrapper').forEach(el => el.style.display = 'none');
 }
+
 function hideLogin() {
   document.body.classList.add('app-ready');
-  document.getElementById('auth-screen').hidden = true;
+  const authScreen = document.getElementById('auth-screen');
+  if (authScreen) {
+    authScreen.hidden = true;
+    authScreen.style.display = 'none';
+  }
   document.querySelector('#sidebar').style.display = '';
   document.querySelector('#main-wrapper').style.display = '';
 }
+
 function loginError(message) {
   const el = document.getElementById('login-error');
   el.textContent = message; el.hidden = false;
