@@ -60,7 +60,9 @@ function makeDemoClient() {
       const builder = {
         select(columns = '*') { state.columns = columns; return builder; },
         order(column, opts = {}) { state.orderBy = { column, ascending: opts.ascending !== false }; return builder; },
-        eq(column, value) { state.filters.push([column, value]); return builder; },
+        eq(column, value) { state.filters.push(['eq', column, value]); return builder; },
+        gte(column, value) { state.filters.push(['gte', column, value]); return builder; },
+        lte(column, value) { state.filters.push(['lte', column, value]); return builder; },
         single() { state.single = true; return builder; },
         insert(payload) { state.action = 'insert'; state.payload = payload; return builder; },
         update(payload) { state.action = 'update'; state.payload = payload; return builder; },
@@ -74,7 +76,16 @@ function makeDemoClient() {
   };
 
   function clone(v) { return JSON.parse(JSON.stringify(v)); }
-  function match(row, filters) { return filters.every(([k, v]) => String(row[k]) === String(v)); }
+  function match(row, filters) {
+    return filters.every(([op, k, v]) => {
+      if (v === undefined || v === null || v === '') return true;
+      const rowVal = row[k];
+      if (op === 'eq') return String(rowVal) === String(v);
+      if (op === 'gte') return rowVal >= v;
+      if (op === 'lte') return rowVal <= v;
+      return true;
+    });
+  }
 
   function enrich(row, columns) {
     const out = clone(row);
@@ -127,7 +138,6 @@ function hideLogin() {
   document.getElementById('auth-screen').hidden = true;
   document.querySelector('#sidebar').style.display = '';
   document.querySelector('#main-wrapper').style.display = '';
-  
 }
 function loginError(message) {
   const el = document.getElementById('login-error');
@@ -136,12 +146,13 @@ function loginError(message) {
 async function startRealSession() {
   demoMode = false; sb = realSb; hideLogin();
   document.body.classList.remove('demo-mode');
-  try { await loadGlobal(); } catch (e) { console.error(e); toast('Erro de conexão com o banco de dados.', 'error'); }
-  console.log('ANTES DO ROUTER');
-
-router();
-
-console.log('DEPOIS DO ROUTER');
+  try {
+    await loadGlobal();
+  } catch (e) {
+    console.error(e);
+    toast('Erro de conexão com o banco de dados.', 'error');
+  }
+  router();
 }
 async function startDemoSession() {
   demoMode = true; sb = makeDemoClient();
@@ -161,7 +172,6 @@ async function logout() {
   G._loaded = false; G._loadingPromise = null;
   showLogin();
 }
-
 
 // ─── Estado Global ────────────────────────────────────
 const G = {
@@ -210,8 +220,6 @@ function formatarMateriaisTexto(itens) {
   return itens.map(i => `${Number(i.quantidade).toLocaleString('pt-BR')}x ${i.descricao}`).join(', ');
 }
 
-// Escapa texto para uso seguro dentro de atributos HTML (evita que aspas ou
-// tags dentro de nomes/descrições "quebrem" a tag e vazem como texto na tela)
 function escAttr(s) {
   return String(s ?? '')
     .replace(/&/g, '&amp;')
@@ -279,9 +287,6 @@ function setContent(html) {
 }
 
 // ─── Carregamento Global ──────────────────────────────
-// Escolas e materiais mudam raramente, então mantemos em cache em vez de
-// buscar de novo a cada troca de tela. Use loadGlobal(true) para forçar
-// atualização (ex: depois de criar/editar/excluir uma escola ou material).
 G._loaded = false;
 G._loadingPromise = null;
 
@@ -530,10 +535,11 @@ async function renderOsList() {
         <tbody>
           ${lista.map(os => {
     const matTexto = formatarMateriaisTexto(os.os_materiais);
-    const matTextoPlano = (os.os_materiais || []).map(i => i.descricao).join(' '); // sem HTML, só para busca
+    const matTextoPlano = (os.os_materiais || []).map(i => i.descricao).join(' ');
     const desc = escAttr((os.descricao_problema + ' ' + os.solicitante + ' ' + os.numero + ' ' + matTextoPlano).toLowerCase());
     return `
-            <tr data-escola-id="${os.escola_id || ''}" data-escola-nome="${escAttr((os.escola?.nome || '').toLowerCase())}" data-desc="${desc}" data-status="${escAttr(os.status)}" data-origem="${escAttr(os.origem || 'Manual')}" data-data="${os.data_abertura}">              <td><strong class="text-blue">#${os.numero}</strong></td>
+            <tr data-escola-id="${os.escola_id || ''}" data-escola-nome="${escAttr((os.escola?.nome || '').toLowerCase())}" data-desc="${desc}" data-status="${escAttr(os.status)}" data-origem="${escAttr(os.origem || 'Manual')}" data-data="${os.data_abertura}">
+              <td><strong class="text-blue">#${os.numero}</strong></td>
               <td>${os.origem === 'Formulario' ? '<span class="badge badge-ativa">Formulário</span>' : '<span class="badge badge-aberta">Manual</span>'}</td>
               <td>${fmt.date(os.data_abertura)}</td>
               <td><strong>${os.escola?.nome || '<span class="text-muted">—</span>'}</strong></td>
@@ -732,8 +738,6 @@ function removeOsItem(i) {
   G.osItens.splice(i, 1);
   renderOsItens();
 }
-
-function updateOsTotal() { }
 
 async function saveOs(e, id) {
   e.preventDefault();
@@ -1159,8 +1163,6 @@ function removeNotaItem(i) {
   renderNotaItens();
 }
 
-function updateNotaTotal() { }
-
 async function saveNota(e, id) {
   e.preventDefault();
   const form = e.target;
@@ -1426,7 +1428,7 @@ async function saveMaterial(e) {
   if (error) { toast('Erro: ' + error.message, 'error'); return; }
   toast('Material adicionado!');
   document.getElementById('material-modal')?.remove();
-  await loadGlobal(true); // força atualização do cache, pois a lista mudou
+  await loadGlobal(true);
   renderMateriais();
 }
 
@@ -1434,7 +1436,7 @@ async function deleteMaterial(id, nome) {
   if (!await confirmDialog(`Excluir o material "${nome}"?`)) return;
   await sb.from('materiais').delete().eq('id', id);
   toast('Material excluído.');
-  await loadGlobal(true); // força atualização do cache, pois a lista mudou
+  await loadGlobal(true);
   renderMateriais();
 }
 
@@ -1797,7 +1799,7 @@ async function saveEscola(e) {
   if (error) { toast('Erro: ' + error.message, 'error'); return; }
   toast('Escola/Setor adicionado!');
   document.getElementById('escola-modal')?.remove();
-  await loadGlobal(true); // força atualização do cache, pois a lista mudou
+  await loadGlobal(true);
   renderConfiguracoes();
 }
 
@@ -1805,7 +1807,7 @@ async function deleteEscola(id, nome) {
   if (!await confirmDialog(`Excluir a escola/setor "${nome}"?`)) return;
   await sb.from('escolas').delete().eq('id', id);
   toast('Escola/Setor excluído.');
-  await loadGlobal(true); // força atualização do cache, pois a lista mudou
+  await loadGlobal(true);
   renderConfiguracoes();
 }
 
@@ -1836,110 +1838,87 @@ window.addEventListener('DOMContentLoaded', async () => {
   const button = document.getElementById('login-button');
   const demoButton = document.getElementById('demo-button');
 
-  form.addEventListener('submit', async (e) => {
-    e.preventDefault();
+  if (form) {
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
 
-    const email = document.getElementById('login-email').value.trim();
-    const password = document.getElementById('login-password').value;
+      const email = document.getElementById('login-email').value.trim();
+      const password = document.getElementById('login-password').value;
 
-    document.getElementById('login-error').hidden = true;
+      document.getElementById('login-error').hidden = true;
 
-    button.disabled = true;
-    button.textContent = 'Entrando...';
+      button.disabled = true;
+      button.textContent = 'Entrando...';
 
-    // Login da demonstração — nunca acessa o Supabase
-    if (email === 'demo@portfolio.local' && password === 'demo1234') {
-      button.disabled = false;
-      button.textContent = 'Entrar';
-      await startDemoSession();
-      return;
-    }
-
-    // Login real pelo Supabase
-    try {
-      const { data, error } = await realSb.auth.signInWithPassword({
-        email,
-        password
-      });
-
-      console.log('LOGIN DATA:', data);
-      console.log('LOGIN ERROR:', error);
-
-      if (error) {
-        console.error('Erro Supabase Auth:', error);
-
-        loginError(error.message);
-
+      // Login da demonstração — nunca acessa o Supabase
+      if (email === 'demo@portfolio.local' && password === 'demo1234') {
         button.disabled = false;
         button.textContent = 'Entrar';
+        await startDemoSession();
         return;
       }
 
-      if (!data || !data.session) {
-        console.error('Login realizado, mas nenhuma sessão foi retornada:', data);
+      // Login real pelo Supabase
+      try {
+        const { data, error } = await realSb.auth.signInWithPassword({
+          email,
+          password
+        });
 
-        loginError('Login realizado, mas a sessão não foi criada.');
+        console.log('LOGIN DATA:', data);
+        console.log('LOGIN ERROR:', error);
 
+        if (error) {
+          console.error('Erro Supabase Auth:', error);
+          loginError(error.message);
+          button.disabled = false;
+          button.textContent = 'Entrar';
+          return;
+        }
+
+        if (!data || !data.session) {
+          console.error('Login realizado, mas nenhuma sessão foi retornada:', data);
+          loginError('Login realizado, mas a sessão não foi criada.');
+          button.disabled = false;
+          button.textContent = 'Entrar';
+          return;
+        }
+
+        console.log('LOGIN REALIZADO COM SUCESSO');
         button.disabled = false;
         button.textContent = 'Entrar';
-        return;
+        await startRealSession();
+      } catch (err) {
+        console.error(err);
+        loginError('Ocorreu um erro ao tentar realizar o login.');
+        button.disabled = false;
+        button.textContent = 'Entrar';
       }
-
-      console.log('LOGIN REALIZADO COM SUCESSO');
-      console.log('Usuário:', data.user?.email);
-
-      button.disabled = false;
-      button.textContent = 'Entrar';
-
-      console.log('ANTES DO START REAL');
-
-      await startRealSession();
-      console.log('DEPOIS DO START REAL');
-console.log('AUTH SCREEN HIDDEN:', document.getElementById('auth-screen')?.hidden);
-console.log('SIDEBAR:', document.querySelector('#sidebar')?.style.display);
-console.log('MAIN:', document.querySelector('#main-wrapper')?.style.display);
-
-      console.log('DEPOIS DO START REAL');
-
-    } catch (err) {
-      console.error('ERRO INESPERADO NO LOGIN:', err);
-
-      loginError(
-        err?.message || 'Ocorreu um erro inesperado ao tentar entrar.'
-      );
-
-      button.disabled = false;
-      button.textContent = 'Entrar';
-    }
-  });
-
-  demoButton.addEventListener('click', startDemoSession);
-  window.addEventListener('hashchange', router);
-
-  const demoSession = localStorage.getItem('manutencao_demo_session') === '1';
-  if (demoSession) {
-    await startDemoSession();
-    return;
+    });
   }
 
-  const { data: { session } } = await realSb.auth.getSession();
-  if (session) await startRealSession();
-  else showLogin();
+  if (demoButton) {
+    demoButton.addEventListener('click', async () => {
+      await startDemoSession();
+    });
+  }
 
-  realSb.auth.onAuthStateChange(async (_event, session) => {
-    if (!session && !demoMode) showLogin();
-  });
-});
+  // Ouvinte de mudança de rota SPA
+  window.addEventListener('hashchange', router);
 
-// Expor funções globais chamadas via onclick no HTML
-Object.assign(window, {
-  navigate, filterOsTable, filterNcTable, filterMatTable,
-  addOsItem, removeOsItem, updateOsTotal,
-  saveOs, deleteOs, printOs, showFormScriptModal,
-  addNotaItem, removeNotaItem, updateNotaTotal,
-  saveNota, deleteNota, printNota,
-  renderMateriais, showMaterialModal, saveMaterial, deleteMaterial,
-  gerarRelatorioOS, gerarRelatorioCompras, printRelatorioOS, printRelatorioCompras,
-  renderConfiguracoes, showEscolaModal, saveEscola, deleteEscola, logout,
-  renderOsForm, renderComprasForm, G,
+  // Verificar sessão ativa na inicialização
+  if (localStorage.getItem('manutencao_demo_session') === '1') {
+    await startDemoSession();
+  } else {
+    try {
+      const { data: { session } } = await realSb.auth.getSession();
+      if (session) {
+        await startRealSession();
+      } else {
+        showLogin();
+      }
+    } catch (e) {
+      showLogin();
+    }
+  }
 });
