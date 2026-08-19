@@ -10,7 +10,6 @@ let sb = realSb;
 let demoMode = false;
 
 const DEMO_KEY = 'manutencao_escolar_demo_v1';
-const { error } = await realSb.auth.signInWithPassword({email,password});
 function demoSeed() {
   return {
     escolas: [
@@ -1833,30 +1832,45 @@ window.addEventListener('DOMContentLoaded', async () => {
   const demoButton=document.getElementById('demo-button');
 
   form.addEventListener('submit', async (e) => {
-    e.preventDefault();
-    const email=document.getElementById('login-email').value.trim();
-    const password=document.getElementById('login-password').value;
-    document.getElementById('login-error').hidden=true;
-    button.disabled=true;
-    button.textContent='Entrando...';
+  e.preventDefault();
 
-    // Credenciais públicas de demonstração: nunca acessam o Supabase.
-    if (email === 'demo@portfolio.local' && password === 'demo1234') {
-      button.disabled=false; button.textContent='Entrar';
-      await startDemoSession();
-      return;
-    }
+  const email = document.getElementById('login-email').value.trim();
+  const password = document.getElementById('login-password').value;
 
-    const { error } = await realSb.auth.signInWithPassword({email,password});
-    if (error) {
-  loginError('E-mail ou senha inválidos.');
-  button.disabled=false;
-  button.textContent='Entrar';
-  return;
-}
-    button.disabled=false; button.textContent='Entrar';
-    await startRealSession();
+  document.getElementById('login-error').hidden = true;
+
+  button.disabled = true;
+  button.textContent = 'Entrando...';
+
+  // Login da demonstração — nunca acessa o Supabase
+  if (email === 'demo@portfolio.local' && password === 'demo1234') {
+    button.disabled = false;
+    button.textContent = 'Entrar';
+    await startDemoSession();
+    return;
+  }
+
+  // Login real pelo Supabase
+  const { error } = await realSb.auth.signInWithPassword({
+    email,
+    password
   });
+
+  if (error) {
+    console.error('Erro Supabase Auth:', error);
+
+    loginError(error.message);
+
+    button.disabled = false;
+    button.textContent = 'Entrar';
+    return;
+  }
+
+  button.disabled = false;
+  button.textContent = 'Entrar';
+
+  await startRealSession();
+});
 
   demoButton.addEventListener('click', startDemoSession);
   window.addEventListener('hashchange', router);
