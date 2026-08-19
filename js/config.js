@@ -1,0 +1,3 @@
+// Configuração do Supabase — NÃO compartilhe esta chave publicamente
+const SUPABASE_URL = 'https://hanhihcwfhehudqvqxkz.supabase.co';
+const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImhhbmhpaGN3ZmhlaHVkcXZxeGt6Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODY5Njc2NjgsImV4cCI6MjEwMjU0MzY2OH0.tqebOniqg2_NgrJizXmqAifpoKver9oOY0UMwnucykM';
