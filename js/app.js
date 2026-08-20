@@ -680,7 +680,8 @@ async function renderOsForm(id) {
             </div>
             <div class="form-group">
               <label>Data de Conclusão</label>
-              <input type="date" name="data_conclusao" value="${os?.data_conclusao || ''}">
+              <input type="text" name="data_conclusao" value="${os?.data_conclusao ? fmt.date(os.data_conclusao) : 'Será preenchida automaticamente ao concluir'}" readonly disabled>
+              <small style="color:var(--slate-500)">Preenchimento automático pelo sistema ao mudar o status para Concluída.</small>
             </div>
             <div class="form-group span-full">
               <label>Descrição do Problema *</label>
@@ -762,10 +763,14 @@ async function saveOs(e, id) {
     tecnico: form.tecnico.value,
     status: form.status.value,
     data_abertura: form.data_abertura.value,
-    data_conclusao: form.data_conclusao.value || null,
+    // A data de conclusão é controlada pelo banco. Nunca aceitar valor manual do formulário.
+    data_conclusao: form.status.value === 'Concluída' ? (id ? undefined : fmt.today()) : null,
     descricao_problema: form.descricao_problema.value,
     descricao_servico: form.descricao_servico.value,
   };
+
+  // Em edição, não enviamos data_conclusao: o trigger do banco decide a data quando o status muda.
+  if (id) delete payload.data_conclusao;
 
   let osId = id;
   if (id) {
