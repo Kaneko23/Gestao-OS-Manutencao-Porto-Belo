@@ -15,6 +15,65 @@
 const SUPABASE_FORM_FUNCTION_URL =
   "https://hanhihcwfhehudqvqxkz.supabase.co/functions/v1/form-os";
 
+function doPost(e) {
+  try {
+    const payload = JSON.parse(e.postData.contents);
+    const expectedSecret = PropertiesService.getScriptProperties()
+      .getProperty("OS_SHEET_WEBHOOK_SECRET");
+
+    if (!expectedSecret || payload.secret !== expectedSecret) {
+      return jsonResponse({ ok: false, error: "Não autorizado" });
+    }
+
+    const spreadsheetId = PropertiesService.getScriptProperties()
+      .getProperty("SPREADSHEET_ID");
+    if (!spreadsheetId) throw new Error("Configure SPREADSHEET_ID nas Propriedades do script.");
+
+    const spreadsheet = SpreadsheetApp.openById(spreadsheetId);
+    const sheet = spreadsheet.getSheetByName("Conclusões OS") ||
+      spreadsheet.insertSheet("Conclusões OS");
+    const headers = [
+      "OS Nº", "Data de Conclusão", "Escola / Setor", "Solicitante",
+      "Técnico", "Problema Relatado", "Serviço Realizado", "Materiais Gastos"
+    ];
+
+    if (sheet.getLastRow() === 0) sheet.appendRow(headers);
+
+    const values = [
+      payload.os.numero,
+      payload.os.dataConclusao || "",
+      payload.os.escola || "",
+      payload.os.solicitante || "",
+      payload.os.tecnico || "",
+      payload.os.problema || "",
+      payload.os.servico || "",
+      (payload.os.materiais || []).map(item =>
+        item.quantidade + " x " + item.descricao
+      ).join("; ")
+    ];
+    const match = sheet.getLastRow() > 1
+      ? sheet.getRange(2, 1, sheet.getLastRow() - 1, 1)
+        .createTextFinder(String(payload.os.numero)).matchEntireCell(true).findNext()
+      : null;
+
+    if (match) {
+      sheet.getRange(match.getRow(), 1, 1, values.length).setValues([values]);
+    } else {
+      sheet.appendRow(values);
+    }
+
+    return jsonResponse({ ok: true });
+  } catch (error) {
+    console.error(error);
+    return jsonResponse({ ok: false, error: String(error) });
+  }
+}
+
+function jsonResponse(body) {
+  return ContentService.createTextOutput(JSON.stringify(body))
+    .setMimeType(ContentService.MimeType.JSON);
+}
+
 function enviarParaSupabase(e) {
   if (!e || !e.values) {
     Logger.log("Nenhum evento de envio encontrado.");

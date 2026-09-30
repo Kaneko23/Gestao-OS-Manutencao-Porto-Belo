@@ -607,6 +607,8 @@ function showFormScriptModal() {
           <li>Apague qualquer código e cole o conteúdo do arquivo <code>google-forms-script.js</code> que preparamos para você.</li>
           <li>Salve o projeto e clique no menu <strong>Acionadores (relógio no menu esquerdo)</strong>.</li>
           <li>Adicione um acionador para a função <code>enviarParaSupabase</code> no evento <strong>Ao enviar formulário</strong>.</li>
+          <li>No Apps Script, configure as propriedades <code>SPREADSHEET_ID</code> e <code>OS_SHEET_WEBHOOK_SECRET</code>. Implante também como <strong>App da Web</strong>, executando como você e permitindo acesso a qualquer pessoa. A aba <strong>Conclusões OS</strong> será criada automaticamente.</li>
+          <li>No Supabase, implante a função <code>complete-os</code> e configure os segredos <code>SHEETS_COMPLETION_WEBHOOK_URL</code> (URL do App da Web) e <code>OS_SHEET_WEBHOOK_SECRET</code> (o mesmo valor definido no Apps Script).</li>
         </ol>
         <p style="margin-top:12px;font-size:12px;color:var(--slate-500)">
           Pronto! Toda vez que uma escola responder ao formulário, a OS aparecerá automaticamente no sistema em tempo real.
@@ -783,18 +785,26 @@ async function saveOs(e, id) {
     osId = data.id;
   }
 
-  if (id) await sb.from('os_materiais').delete().eq('os_id', osId);
+  if (id) {
+    const { error } = await sb.from('os_materiais').delete().eq('os_id', osId);
+    if (error) { toast('Erro ao atualizar materiais: ' + error.message, 'error'); btn.disabled = false; btn.textContent = 'Salvar'; return; }
+  }
   const itens = G.osItens.filter(i => i.descricao?.trim());
   if (itens.length) {
-    await sb.from('os_materiais').insert(itens.map(i => ({
+    const { error } = await sb.from('os_materiais').insert(itens.map(i => ({
       os_id: osId,
       descricao: i.descricao,
       quantidade: parseFloat(i.quantidade) || 1,
       custo_unitario: 0,
     })));
+    if (error) { toast('Erro ao salvar materiais: ' + error.message, 'error'); btn.disabled = false; btn.textContent = 'Salvar'; return; }
   }
 
   toast(id ? 'OS atualizada com sucesso!' : 'OS criada com sucesso!');
+  if (!demoMode && payload.status === 'Concluída') {
+    const { error } = await sb.functions.invoke('complete-os', { body: { osId } });
+    if (error) toast('OS salva, mas a planilha não foi atualizada: ' + error.message, 'error');
+  }
   navigate('os', osId);
 }
 
