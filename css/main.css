@@ -419,7 +419,7 @@ table {
 
 thead tr {
   background: var(--slate-50);
-  border-bottom: 1px solid var(--slate-200);
+  border-bottom: 1px solid var(--border-color);
 }
 
 th {
@@ -435,13 +435,13 @@ th {
 
 td {
   padding: 12px 14px;
-  border-bottom: 1px solid var(--slate-100);
-  color: var(--slate-700);
+  border-bottom: 1px solid var(--border-subtle);
+  color: var(--text-secondary);
   vertical-align: middle;
 }
 
 tbody tr:last-child td { border-bottom: none; }
-tbody tr:hover td { background: #f8fafc; }
+tbody tr:hover td { background: var(--table-hover); }
 
 /* Linhas clicáveis para entrar direto na OS */
 .clickable-row {
@@ -449,23 +449,22 @@ tbody tr:hover td { background: #f8fafc; }
   transition: background-color .15s ease;
 }
 .clickable-row:hover td {
-  background: #f1f5f9 !important;
+  background: var(--table-hover) !important;
 }
 
-/* Coluna de Ações Fixa (Sticky) — nunca sai da tela */
+/* Coluna de Ações Fixa (Sticky) — sem sombra ou linha vertical artificial */
 .th-actions, .td-actions-cell {
   position: sticky;
   right: 0;
   z-index: 2;
   background: var(--white);
-  box-shadow: -4px 0 8px -2px rgba(15, 23, 42, 0.08);
 }
 thead th.th-actions {
   background: var(--slate-50);
   z-index: 3;
 }
 .clickable-row:hover .td-actions-cell {
-  background: #f1f5f9 !important;
+  background: var(--table-hover) !important;
 }
 
 .td-actions {
@@ -491,8 +490,19 @@ thead th.th-actions {
 }
 .clickable-row:hover .os-badge-num {
   background: var(--primary);
-  color: var(--white);
+  color: #ffffff;
   border-color: var(--primary);
+}
+
+[data-theme="dark"] .os-badge-num {
+  color: #60a5fa;
+  background: rgba(59, 130, 246, 0.18);
+  border-color: rgba(59, 130, 246, 0.4);
+}
+[data-theme="dark"] .clickable-row:hover .os-badge-num {
+  background: #3b82f6;
+  color: #ffffff;
+  border-color: #3b82f6;
 }
 
 /* -------------------- BADGES -------------------- */
@@ -518,6 +528,117 @@ thead th.th-actions {
 .badge-concluida { background: #d1fae5; color: #059669; }
 .badge-ativa     { background: #dbeafe; color: #2563eb; }
 .badge-encerrada { background: #e2e8f0; color: #64748b; }
+
+[data-theme="dark"] .badge-aberta    { background: #162032; color: #94a3b8; }
+[data-theme="dark"] .badge-andamento { background: rgba(245, 158, 11, 0.2); color: #fbbf24; }
+[data-theme="dark"] .badge-concluida { background: rgba(16, 185, 129, 0.2); color: #34d399; }
+[data-theme="dark"] .badge-ativa     { background: rgba(59, 130, 246, 0.2); color: #60a5fa; }
+[data-theme="dark"] .badge-encerrada { background: #162032; color: #64748b; }
+
+/* -------------------- BOTÃO TEMA ESCURO/CLARO -------------------- */
+.theme-toggle-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 7px 13px;
+  border-radius: var(--radius-sm);
+  background: var(--white);
+  border: 1px solid var(--border-color);
+  color: var(--text-main);
+  font-size: 12.5px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: var(--transition);
+  box-shadow: var(--shadow-sm);
+  user-select: none;
+}
+.theme-toggle-btn svg {
+  width: 15px;
+  height: 15px;
+  flex-shrink: 0;
+  transition: transform .3s ease, color .2s ease;
+}
+.theme-toggle-btn:hover {
+  background: var(--slate-100);
+  border-color: var(--slate-300);
+  transform: translateY(-1px);
+}
+.theme-toggle-btn:hover svg {
+  transform: rotate(20deg);
+}
+
+[data-theme="dark"] .theme-toggle-btn {
+  background: #152033;
+  border-color: #233149;
+  color: #f1f5f9;
+}
+[data-theme="dark"] .theme-toggle-btn:hover {
+  background: #1c2b44;
+  border-color: #3b82f6;
+  color: #60a5fa;
+}
+
+.sidebar-theme-btn {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  font-size: 13px;
+  padding: 8px 12px;
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  color: #cbd5e1;
+  font-weight: 600;
+  transition: var(--transition);
+}
+.sidebar-theme-btn:hover {
+  background: rgba(255, 255, 255, 0.12);
+  color: #ffffff;
+  border-color: rgba(255, 255, 255, 0.25);
+}
+.sidebar-theme-btn svg {
+  width: 16px;
+  height: 16px;
+}
+
+/* -------------------- BOTÕES ADAPTADOS AO TEMA -------------------- */
+[data-theme="dark"] .btn-outline {
+  background: #152033;
+  color: #e2e8f0;
+  border-color: #233149;
+}
+[data-theme="dark"] .btn-outline:hover {
+  background: #1c2b44;
+  border-color: #3b82f6;
+  color: #ffffff;
+}
+
+[data-theme="dark"] .btn-ghost {
+  color: #cbd5e1;
+}
+[data-theme="dark"] .btn-ghost:hover {
+  background: #152033;
+  color: #ffffff;
+}
+
+/* Formulários e Inputs em Modo Escuro */
+[data-theme="dark"] input[type="text"],
+[data-theme="dark"] input[type="number"],
+[data-theme="dark"] input[type="date"],
+[data-theme="dark"] input[type="email"],
+[data-theme="dark"] select,
+[data-theme="dark"] textarea {
+  background: var(--input-bg);
+  border-color: var(--input-border);
+  color: var(--text-main);
+}
+[data-theme="dark"] input[type="date"]::-webkit-calendar-picker-indicator {
+  filter: invert(0.85);
+  cursor: pointer;
+}
 
 /* -------------------- FILTERS -------------------- */
 .filters-bar {

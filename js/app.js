@@ -1882,11 +1882,53 @@ function svgPrint() { return `<svg ${svgAttrs}><polyline points="6 9 6 2 18 2 18
 function svgArrowLeft() { return `<svg ${svgAttrs}><line x1="19" y1="12" x2="5" y2="12"/><polyline points="12 19 5 12 12 5"/></svg>`; }
 function svgX() { return `<svg ${svgAttrs}><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>`; }
 function svgCode() { return `<svg ${svgAttrs}><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg>`; }
+function svgSun() {
+  return `<svg ${svgAttrs}><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>`;
+}
+function svgMoon() {
+  return `<svg ${svgAttrs}><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>`;
+}
+
+/* =====================================================
+   TEMA (MODO ESCURO / CLARO)
+   ===================================================== */
+function updateThemeUI(theme) {
+  const isDark = theme === 'dark';
+  document.documentElement.setAttribute('data-theme', theme);
+
+  const headerBtn = document.getElementById('theme-toggle-btn');
+  if (headerBtn) {
+    headerBtn.innerHTML = isDark
+      ? `${svgSun()} <span class="theme-toggle-label">Modo Claro</span>`
+      : `${svgMoon()} <span class="theme-toggle-label">Modo Escuro</span>`;
+    headerBtn.title = isDark ? 'Mudar para modo claro' : 'Mudar para modo escuro';
+  }
+
+  const sidebarBtn = document.getElementById('sidebar-theme-btn');
+  if (sidebarBtn) {
+    sidebarBtn.innerHTML = isDark
+      ? `${svgSun()} Modo Claro`
+      : `${svgMoon()} Modo Escuro`;
+    sidebarBtn.title = isDark ? 'Mudar para modo claro' : 'Mudar para modo escuro';
+  }
+}
+
+function toggleTheme() {
+  const current = document.documentElement.getAttribute('data-theme') || 'light';
+  const next = current === 'dark' ? 'light' : 'dark';
+  try {
+    localStorage.setItem('manutencao_theme', next);
+  } catch (e) { }
+  updateThemeUI(next);
+}
+window.toggleTheme = toggleTheme;
 
 /* =====================================================
    INICIALIZAÇÃO
    ===================================================== */
 window.addEventListener('DOMContentLoaded', async () => {
+  // Inicializar estado do botão de tema
+  updateThemeUI(document.documentElement.getAttribute('data-theme') || 'light');
   const form = document.getElementById('login-form');
   const button = document.getElementById('login-button');
   const demoButton = document.getElementById('demo-button');

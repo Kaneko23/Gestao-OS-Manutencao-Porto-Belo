@@ -36,3 +36,43 @@
 @media(max-width:600px){.auth-card{padding:26px 22px}.auth-screen{padding:14px}}
 
 body:not(.app-ready) #sidebar,body:not(.app-ready) #main-wrapper{display:none}
+
+/* ===== MODO ESCURO AUTH ===== */
+[data-theme="dark"] .auth-screen {
+  background: linear-gradient(135deg, #070b14 0%, #0f172a 100%);
+}
+[data-theme="dark"] .auth-card {
+  background: #0f172a;
+  border-color: #1e293b;
+  box-shadow: 0 20px 60px rgba(0,0,0,.6);
+}
+[data-theme="dark"] .auth-brand h1 { color: #f8fafc; }
+[data-theme="dark"] .auth-brand p  { color: #94a3b8; }
+[data-theme="dark"] .auth-heading h2 { color: #f8fafc; }
+[data-theme="dark"] .auth-heading p  { color: #94a3b8; }
+[data-theme="dark"] .auth-label { color: #cbd5e1; }
+[data-theme="dark"] .auth-input {
+  background: #0b1120;
+  border-color: #25354e;
+  color: #f8fafc;
+}
+[data-theme="dark"] .auth-input:focus {
+  border-color: #3b82f6;
+  box-shadow: 0 0 0 3px rgba(59,130,246,.25);
+}
+[data-theme="dark"] .auth-divider { color: #64748b; }
+[data-theme="dark"] .auth-divider:before,
+[data-theme="dark"] .auth-divider:after {
+  background: #1e293b;
+}
+[data-theme="dark"] .auth-demo-button {
+  background: #152033;
+  border-color: #25354e;
+  color: #cbd5e1;
+}
+[data-theme="dark"] .auth-demo-button:hover {
+  background: #1c2b44;
+  color: #ffffff;
+}
+[data-theme="dark"] .auth-demo-note { color: #64748b; }
+

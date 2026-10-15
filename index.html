@@ -7,6 +7,17 @@
   <title>Manutenção Escolar — Prefeitura de Portobelo</title>
   <meta name="description"
     content="Sistema de gestão de manutenção escolar e controle de compras para a Prefeitura de Portobelo">
+  <meta name="color-scheme" content="light dark">
+  <script>
+    (function () {
+      try {
+        var saved = localStorage.getItem('manutencao_theme');
+        var prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+        var theme = saved || (prefersDark ? 'dark' : 'light');
+        document.documentElement.setAttribute('data-theme', theme);
+      } catch (e) { }
+    })();
+  </script>
   <link rel="stylesheet" href="css/main.css">
   <link rel="stylesheet" href="css/auth.css">
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -143,7 +154,10 @@
       </li>
     </ul>
 
-    <div class="sidebar-footer" style="display:flex;flex-direction:column;gap:12px">
+    <div class="sidebar-footer" style="display:flex;flex-direction:column;gap:10px">
+      <button type="button" class="sidebar-theme-btn" id="sidebar-theme-btn" onclick="toggleTheme()">
+        <!-- Ícone preenchido via JavaScript -->
+      </button>
       <button type="button" class="btn btn-outline" onclick="logout()"
         style="width:100%;display:flex;align-items:center;justify-content:center;gap:8px;font-size:13px;padding:8px;cursor:pointer">
         <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2">
@@ -172,7 +186,12 @@
         </button>
         <div id="page-title">Dashboard</div>
       </div>
-      <div id="header-actions"></div>
+      <div style="display:flex;align-items:center;gap:10px">
+        <button id="theme-toggle-btn" class="theme-toggle-btn" type="button" onclick="toggleTheme()" title="Alternar modo escuro/claro">
+          <!-- Ícone preenchido via JavaScript -->
+        </button>
+        <div id="header-actions"></div>
+      </div>
     </header>
 
     <!-- Content Area -->
