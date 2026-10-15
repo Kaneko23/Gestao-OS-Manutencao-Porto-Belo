@@ -540,7 +540,15 @@ async function renderOsList() {
     <div class="table-wrapper">
       <table id="os-table">
         <thead><tr>
-          <th>OS Nº</th><th>Origem</th><th>Data</th><th>Escola / Setor</th><th>Solicitante</th><th>Descrição do Problema</th><th>Materiais Gastos</th><th>Status</th><th></th>
+          <th style="width:85px">OS Nº</th>
+          <th style="width:110px">Origem</th>
+          <th style="width:105px">Data</th>
+          <th style="min-width:140px;max-width:180px">Escola / Setor</th>
+          <th style="min-width:140px;max-width:180px">Solicitante</th>
+          <th style="min-width:180px;max-width:240px">Descrição do Problema</th>
+          <th style="min-width:160px;max-width:220px">Materiais Gastos</th>
+          <th style="width:115px">Status</th>
+          <th class="th-actions" style="width:130px;text-align:center">Ações</th>
         </tr></thead>
         <tbody>
           ${lista.map(os => {
@@ -548,19 +556,25 @@ async function renderOsList() {
     const matTextoPlano = (os.os_materiais || []).map(i => i.descricao).join(' ');
     const desc = escAttr((os.descricao_problema + ' ' + os.solicitante + ' ' + os.numero + ' ' + matTextoPlano).toLowerCase());
     return `
-            <tr data-escola-id="${os.escola_id || ''}" data-escola-nome="${escAttr((os.escola?.nome || '').toLowerCase())}" data-desc="${desc}" data-status="${escAttr(os.status)}" data-origem="${escAttr(os.origem || 'Manual')}" data-data="${os.data_abertura}">
-              <td><strong class="text-blue">#${os.numero}</strong></td>
+            <tr class="clickable-row" onclick="navigate('os','${os.id}')" title="Clique para entrar na OS #${os.numero}" data-escola-id="${os.escola_id || ''}" data-escola-nome="${escAttr((os.escola?.nome || '').toLowerCase())}" data-desc="${desc}" data-status="${escAttr(os.status)}" data-origem="${escAttr(os.origem || 'Manual')}" data-data="${os.data_abertura}">
+              <td><span class="os-badge-num">#${os.numero}</span></td>
               <td>${os.origem === 'Formulario' ? '<span class="badge badge-ativa">Formulário</span>' : '<span class="badge badge-aberta">Manual</span>'}</td>
               <td>${fmt.date(os.data_abertura)}</td>
-              <td><strong>${os.escola?.nome || '<span class="text-muted">—</span>'}</strong></td>
-              <td>${os.solicitante || '<span class="text-muted">—</span>'}</td>
-              <td style="max-width:200px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${os.descricao_problema}</td>
-              <td style="max-width:200px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${matTexto}</td>
+              <td style="max-width:180px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis" title="${escAttr(os.escola?.nome || '')}"><strong>${os.escola?.nome || '<span class="text-muted">—</span>'}</strong></td>
+              <td style="max-width:180px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis" title="${escAttr(os.solicitante || '')}">${os.solicitante || '<span class="text-muted">—</span>'}</td>
+              <td style="max-width:240px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis" title="${escAttr(os.descricao_problema)}">${os.descricao_problema}</td>
+              <td style="max-width:220px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis" title="${escAttr(matTexto)}">${matTexto}</td>
               <td>${badgeStatus(os.status)}</td>
-              <td><div class="td-actions">
-                <button class="btn btn-ghost btn-sm btn-icon" title="Ver detalhes / Lançar Materiais" onclick="navigate('os','${os.id}')">${svgEye()}</button>
-                <button class="btn btn-ghost btn-sm btn-icon text-red" title="Excluir" onclick="deleteOs('${os.id}','${os.numero}')">${svgTrash()}</button>
-              </div></td>
+              <td class="td-actions-cell" onclick="event.stopPropagation()">
+                <div class="td-actions">
+                  <button class="btn btn-primary btn-sm" title="Entrar na OS / Ver detalhes" onclick="navigate('os','${os.id}')" style="padding:5px 10px;font-size:12px;gap:5px">
+                    ${svgEye()} Abrir
+                  </button>
+                  <button class="btn btn-ghost btn-sm btn-icon text-red" title="Excluir OS" onclick="deleteOs('${os.id}','${os.numero}')">
+                    ${svgTrash()}
+                  </button>
+                </div>
+              </td>
             </tr>`;
   }).join('')}
         </tbody>
@@ -822,7 +836,7 @@ async function renderOsDetail(id) {
 
   setHeaderAction(`
     <button class="btn btn-outline" onclick="navigate('os')">${svgArrowLeft()} Voltar</button>
-    <button class="btn btn-outline" onclick="navigate('os','${id}');setTimeout(()=>renderOsForm('${id}'),0)">
+    <button class="btn btn-outline" onclick="renderOsForm('${id}')">
       ${svgEdit()} Editar OS
     </button>
     <button class="btn btn-primary" onclick="printOs()">${svgPrint()} Imprimir OS</button>
@@ -1018,7 +1032,15 @@ async function renderComprasList() {
     <div class="table-wrapper">
       <table id="nc-table">
         <thead><tr>
-          <th>Nota Nº</th><th>Data</th><th>Fornecedor</th><th>Quem Buscou</th><th>Quem Autorizou</th><th>Destinos (Escolas)</th><th>Total de Itens</th><th>Status</th><th></th>
+          <th style="width:110px">Nota Nº</th>
+          <th style="width:105px">Data</th>
+          <th style="min-width:140px;max-width:180px">Fornecedor</th>
+          <th style="min-width:120px;max-width:160px">Quem Buscou</th>
+          <th style="min-width:120px;max-width:160px">Quem Autorizou</th>
+          <th style="min-width:140px;max-width:200px">Destinos (Escolas)</th>
+          <th style="width:110px">Total Itens</th>
+          <th style="width:115px">Status</th>
+          <th class="th-actions" style="width:130px;text-align:center">Ações</th>
         </tr></thead>
         <tbody>
           ${lista.map(nc => {
@@ -1026,19 +1048,25 @@ async function renderComprasList() {
     const escolaIds = (nc.itens_compra || []).map(i => i.escola_id).filter(Boolean).join(',');
     const totalQtd = (nc.itens_compra || []).reduce((s, i) => s + Number(i.quantidade || 0), 0);
     return `
-            <tr data-forn="${escAttr((nc.fornecedor || '').toLowerCase())}" data-resp="${escAttr((nc.responsavel_compra + ' ' + nc.responsavel_autorizacao + ' ' + nc.numero).toLowerCase())}" data-escolas-id="${escolaIds}" data-status="${escAttr(nc.status)}" data-data="${nc.data_compra}">
-              <td><strong class="text-blue">Nota #${nc.numero}</strong></td>
+            <tr class="clickable-row" onclick="navigate('compras','${nc.id}')" title="Clique para abrir a Nota #${nc.numero}" data-forn="${escAttr((nc.fornecedor || '').toLowerCase())}" data-resp="${escAttr((nc.responsavel_compra + ' ' + nc.responsavel_autorizacao + ' ' + nc.numero).toLowerCase())}" data-escolas-id="${escolaIds}" data-status="${escAttr(nc.status)}" data-data="${nc.data_compra}">
+              <td><span class="os-badge-num">Nota #${nc.numero}</span></td>
               <td>${fmt.date(nc.data_compra)}</td>
-              <td><strong>${nc.fornecedor}</strong></td>
-              <td>${nc.responsavel_compra || '<span class="text-muted">—</span>'}</td>
-              <td>${nc.responsavel_autorizacao || '<span class="text-muted">—</span>'}</td>
-              <td>${escolasDestino ? `<span class="badge badge-ativa" title="${escolasDestino}">${escolasDestino}</span>` : '<span class="text-muted">Estoque Geral</span>'}</td>
+              <td style="max-width:180px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis" title="${escAttr(nc.fornecedor)}"><strong>${nc.fornecedor}</strong></td>
+              <td style="max-width:160px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis" title="${escAttr(nc.responsavel_compra || '')}">${nc.responsavel_compra || '<span class="text-muted">—</span>'}</td>
+              <td style="max-width:160px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis" title="${escAttr(nc.responsavel_autorizacao || '')}">${nc.responsavel_autorizacao || '<span class="text-muted">—</span>'}</td>
+              <td style="max-width:200px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${escolasDestino ? `<span class="badge badge-ativa" title="${escAttr(escolasDestino)}">${escolasDestino}</span>` : '<span class="text-muted">Estoque Geral</span>'}</td>
               <td><strong>${totalQtd} item(ns)</strong></td>
               <td>${badgeStatus(nc.status)}</td>
-              <td><div class="td-actions">
-                <button class="btn btn-ghost btn-sm btn-icon" title="Ver detalhes da Nota" onclick="navigate('compras','${nc.id}')">${svgEye()}</button>
-                <button class="btn btn-ghost btn-sm btn-icon text-red" title="Excluir" onclick="deleteNota('${nc.id}','${nc.numero}')">${svgTrash()}</button>
-              </div></td>
+              <td class="td-actions-cell" onclick="event.stopPropagation()">
+                <div class="td-actions">
+                  <button class="btn btn-primary btn-sm" title="Ver detalhes da Nota" onclick="navigate('compras','${nc.id}')" style="padding:5px 10px;font-size:12px;gap:5px">
+                    ${svgEye()} Abrir
+                  </button>
+                  <button class="btn btn-ghost btn-sm btn-icon text-red" title="Excluir Nota" onclick="deleteNota('${nc.id}','${nc.numero}')">
+                    ${svgTrash()}
+                  </button>
+                </div>
+              </td>
             </tr>`;
   }).join('')}
         </tbody>
@@ -1247,7 +1275,7 @@ async function renderComprasDetail(id) {
 
   setHeaderAction(`
     <button class="btn btn-outline" onclick="navigate('compras')">${svgArrowLeft()} Voltar</button>
-    <button class="btn btn-outline" onclick="navigate('compras','${id}');setTimeout(()=>renderComprasForm('${id}'),0)">${svgEdit()} Editar Nota</button>
+    <button class="btn btn-outline" onclick="renderComprasForm('${id}')">${svgEdit()} Editar Nota</button>
     <button class="btn btn-primary" onclick="printNota()">${svgPrint()} Imprimir Comprovante</button>
   `);
 
