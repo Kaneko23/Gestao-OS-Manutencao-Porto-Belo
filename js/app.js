@@ -609,27 +609,36 @@ function showFormScriptModal() {
   bd.className = 'modal-backdrop';
   bd.id = 'script-modal';
   bd.innerHTML = `
-    <div class="modal" style="max-width:640px">
+    <div class="modal" style="max-width:680px">
       <div class="modal-header">
-        <h3>Como conectar seu Formulário Google ao Sistema</h3>
+        <h3>Integração com Formulário Google e Envio de E-mail</h3>
         <button class="btn btn-ghost btn-icon" onclick="document.getElementById('script-modal').remove()">${svgX()}</button>
       </div>
       <div class="modal-body">
-        <ol style="margin-left:20px;line-height:1.6;font-size:13px;color:var(--slate-700)">
-          <li>Abra a planilha de respostas do seu Formulário Google.</li>
-          <li>No menu, vá em <strong>Extensões > Apps Script</strong>.</li>
-          <li>Apague qualquer código e cole o conteúdo do arquivo <code>google-forms-script.js</code> que preparamos para você.</li>
-          <li>Salve o projeto e clique no menu <strong>Acionadores (relógio no menu esquerdo)</strong>.</li>
-          <li>Adicione um acionador para a função <code>enviarParaSupabase</code> no evento <strong>Ao enviar formulário</strong>.</li>
-          <li>No Apps Script, configure as propriedades <code>SPREADSHEET_ID</code> e <code>OS_SHEET_WEBHOOK_SECRET</code>. Implante também como <strong>App da Web</strong>, executando como você e permitindo acesso a qualquer pessoa. A aba <strong>Conclusões OS</strong> será criada automaticamente.</li>
-          <li>No Supabase, implante a função <code>complete-os</code> e configure os segredos <code>SHEETS_COMPLETION_WEBHOOK_URL</code> (URL do App da Web) e <code>OS_SHEET_WEBHOOK_SECRET</code> (o mesmo valor definido no Apps Script).</li>
-        </ol>
-        <p style="margin-top:12px;font-size:12px;color:var(--slate-500)">
-          Pronto! Toda vez que uma escola responder ao formulário, a OS aparecerá automaticamente no sistema em tempo real.
+        <p style="font-size:13px;color:var(--text-secondary);margin-bottom:12px;">
+          Esta integração bidirecional sincroniza a abertura de chamados, atualiza na planilha o <strong>serviço realizado (o que foi feito)</strong> ao concluir a OS e <strong>envia um e-mail de volta</strong> ao solicitante.
         </p>
+        <ol style="margin-left:20px;line-height:1.6;font-size:13px;color:var(--text-primary)">
+          <li>Abra a planilha vinculada ao seu Formulário Google.</li>
+          <li>No menu superior da planilha, clique em <strong>Extensões > Apps Script</strong>.</li>
+          <li>Substitua todo o código existente pelo conteúdo do arquivo <code>google-forms-script.js</code> do projeto.</li>
+          <li>No Apps Script, vá em <strong>Configurações do projeto (ícone de engrenagem) > Propriedades do script</strong> e adicione:
+            <ul style="margin-top:4px;margin-left:16px;color:var(--text-secondary);font-size:12px;">
+              <li><code>FORM_WEBHOOK_SECRET</code>: segredo compartilhado para receber envios do formulário.</li>
+              <li><code>OS_SHEET_WEBHOOK_SECRET</code>: segredo compartilhado para autorizar a conclusão de OS.</li>
+              <li><code>SPREADSHEET_ID</code>: (opcional, só necessário se o script for executado avulso).</li>
+            </ul>
+          </li>
+          <li>Crie um acionador (ícone de relógio): selecione <code>enviarParaSupabase</code> no evento <strong>Ao enviar formulário</strong>.</li>
+          <li>Clique em <strong>Implantar > Nova implantação</strong> como <strong>App da Web</strong>: execute como <em>Você</em> e permita acesso a <em>Qualquer pessoa</em>. Copie a URL gerada.</li>
+          <li>No Supabase, defina os segredos da Edge Function <code>complete-os</code>: <code>SHEETS_COMPLETION_WEBHOOK_URL</code> (URL do App da Web) e <code>OS_SHEET_WEBHOOK_SECRET</code>.</li>
+        </ol>
+        <div style="margin-top:14px;padding:12px;background:var(--slate-100);border-radius:8px;font-size:12px;color:var(--text-secondary);">
+          ✨ <strong>Automatismo garantido:</strong> Ao fechar uma OS no sistema com status "Concluída", a planilha preenche automaticamente o que foi feito, técnico, data e materiais, e dispara o e-mail de retorno formatado para o endereço que enviou o formulário!
+        </div>
       </div>
       <div class="modal-footer">
-        <button class="btn btn-primary" onclick="document.getElementById('script-modal').remove()">Entendi</button>
+        <button class="btn btn-primary" onclick="document.getElementById('script-modal').remove()">Entendido</button>
       </div>
     </div>`;
   document.body.appendChild(bd);
@@ -816,8 +825,14 @@ async function saveOs(e, id) {
 
   toast(id ? 'OS atualizada com sucesso!' : 'OS criada com sucesso!');
   if (!demoMode && payload.status === 'Concluída') {
-    const { error } = await sb.functions.invoke('complete-os', { body: { osId } });
-    if (error) toast('OS salva, mas a planilha não foi atualizada: ' + error.message, 'error');
+    const { data: compData, error } = await sb.functions.invoke('complete-os', { body: { osId } });
+    if (error) {
+      toast('OS salva, mas a planilha/e-mail não puderam ser sincronizados: ' + error.message, 'warning');
+    } else if (compData?.emailEnviadoPara) {
+      toast(`OS concluída! Planilha atualizada e e-mail enviado para ${compData.emailEnviadoPara}.`, 'success');
+    } else {
+      toast('OS concluída e planilha atualizada com sucesso!', 'success');
+    }
   }
   navigate('os', osId);
 }

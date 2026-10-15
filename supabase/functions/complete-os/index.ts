@@ -38,12 +38,17 @@ Deno.serve(async (req) => {
     );
     const { data: os, error } = await supabase
       .from("ordens_servico")
-      .select("numero,data_conclusao,solicitante,tecnico,descricao_problema,descricao_servico,status,escola:escola_id(nome),os_materiais(descricao,quantidade)")
+      .select("numero,data_conclusao,solicitante,tecnico,descricao_problema,descricao_servico,status,form_response_id,escola:escola_id(nome,email),os_materiais(descricao,quantidade)")
       .eq("id", osId)
       .single();
 
     if (error || !os) return jsonResponse({ error: "OS não encontrada" }, 404);
     if (os.status !== "Concluída") return jsonResponse({ error: "A OS ainda não foi concluída" }, 409);
+
+    const emailSolicitante =
+      os.form_response_id ||
+      (os.solicitante && os.solicitante.includes("@") ? os.solicitante : "") ||
+      (os.escola?.email || "");
 
     const sheetResponse = await fetch(webhookUrl, {
       method: "POST",
@@ -54,7 +59,9 @@ Deno.serve(async (req) => {
           numero: os.numero,
           dataConclusao: os.data_conclusao,
           escola: os.escola?.nome || "",
+          escolaEmail: os.escola?.email || "",
           solicitante: os.solicitante,
+          emailSolicitante,
           tecnico: os.tecnico,
           problema: os.descricao_problema,
           servico: os.descricao_servico,
@@ -69,7 +76,11 @@ Deno.serve(async (req) => {
       return jsonResponse({ error: "Não foi possível atualizar a planilha" }, 502);
     }
 
-    return jsonResponse({ ok: true });
+    return jsonResponse({
+      ok: true,
+      emailEnviadoPara: sheetResult.emailEnviadoPara || null,
+      planilhaAtualizada: sheetResult.ok || false,
+    });
   } catch (error) {
     console.error(error);
     return jsonResponse({ error: "Falha ao sincronizar a OS com a planilha" }, 500);

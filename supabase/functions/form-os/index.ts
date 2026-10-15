@@ -61,6 +61,7 @@ Deno.serve(async (req) => {
         descricao_problema: descricaoProblema || "Manutenção solicitada via formulário",
         status: "Aberta",
         origem: "Formulario",
+        form_response_id: emailSolicitante || null,
         data_abertura: new Date().toISOString().split("T")[0],
       })
       .select()
@@ -68,7 +69,7 @@ Deno.serve(async (req) => {
 
     if (error) throw error;
 
-    return new Response(JSON.stringify({ ok: true, id: data.id }), {
+    return new Response(JSON.stringify({ ok: true, id: data.id, numero: data.numero }), {
       status: 200,
       headers: { ...corsHeaders, "Content-Type": "application/json" },
     });
